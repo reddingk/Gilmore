@@ -1,0 +1,45 @@
+{
+  "name": "gilmore_website",
+  "version": "1.0.0",
+  "description": "Roy L. Gilmore Funeral Home Website",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "build-css": "less-watch-compiler --run-once --main-file=app.less src/css/ public/css/",
+    "watch-css": "npm run build-css && less-watch-compiler --main-file=app.less src/css/ public/css/",
+    "build": "npm run build-css && react-scripts build",
+    "heroku-postbuild": "npm run build",
+    "script-run": "react-scripts start",
+    "script-dev": "concurrently \"npm run watch-css\" \"npm run script-run\" \"wait-on http://localhost:3001\""
+  },
+  "author": "Kris Redding",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "express-http-to-https": "^1.1.4",
+    "history": "^4.9.0",
+    "jquery": "^3.4.1",
+    "react": "^16.8.1",
+    "react-alice-carousel": "^1.13.1",
+    "react-bootstrap": "^1.0.0-beta.11",
+    "react-dom": "^16.8.1",
+    "react-ga": "^2.6.0",
+    "react-responsive-carousel": "^3.1.46",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^3.0.1",
+    "react-spring": "^8.0.20",
+    "reactstrap": "^8.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "less-watch-compiler": "^1.13.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

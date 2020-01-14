@@ -1,0 +1,64 @@
+.home {
+    .home-section {
+        .cover {
+            width: 100%;
+            height: calc(100vh - 50px);
+            position: relative;
+            overflow: hidden;
+            img { 
+                position: relative; 
+                z-index:0; 
+                width: 100%;
+                -webkit-filter: grayscale(100%);
+                filter: grayscale(100%);
+            }
+            &:before { 
+                content:'';
+                position: absolute;
+                z-index:1;
+                top:0;
+                left:0;
+                width: 100%;
+                height: 100%;
+                .color1(background, 0.5);
+            }
+        }
+        &.cover-section {
+            display: flex;
+            justify-content: end;
+            position: relative;
+            border-bottom: 1px solid @color1;
+            .cover-text {
+                width: 40%;
+                height: 100%;
+                padding: 10% 1% 10% 50px;
+                background: rgba(255,255,255,1);
+                position: absolute;
+                top:0;
+                right:0;
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border-bottom-left-radius: 50%;
+                border-top-left-radius: 50%;
+                overflow: hidden;
+                h1 { margin-bottom: 30px; color: @color1; }
+                p { 
+                    font-size: 2rem; 
+                    line-height: 3rem;
+                    text-align: right;
+                    span { color: @color2; font-size: 3rem; font-weight: bold;}
+                }
+            }
+        }
+
+        &.text-section {
+            padding: 70px 7%;
+            text-align: center;
+
+            p { font-size: 1.7rem;}
+        }
+        .section-title { font-family: 'Edwardian Script ITC'; margin-bottom: 30px; color: @color1; font-size: 3.5rem; }
+    }
+}
