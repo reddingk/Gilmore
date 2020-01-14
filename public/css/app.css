@@ -57,7 +57,7 @@
   border-bottom: 1px solid #632423;
 }
 .home .home-section.cover-section .cover-text {
-  width: 40%;
+  width: 572px;
   height: 100%;
   padding: 10% 1% 10% 50px;
   background: #ffffff;
@@ -93,11 +93,121 @@
 .home .home-section.text-section p {
   font-size: 1.7rem;
 }
+.home .home-section.space-area {
+  padding: 50px 50px 100px 0;
+}
+.home .home-section.horizontal-list {
+  padding: 70px 4%;
+  text-align: center;
+}
 .home .home-section .section-title {
   font-family: 'Edwardian Script ITC';
   margin-bottom: 30px;
   color: #632423;
   font-size: 3.5rem;
+}
+.home .home-section .list-area {
+  display: flex;
+  flex-direction: row;
+  padding: 75px 50px;
+  background: #632423;
+  color: #ffffff;
+  border-bottom-right-radius: 200px;
+  border-top-right-radius: 200px;
+}
+.home .home-section .list-area .list-item {
+  padding: 10px;
+  text-align: center;
+}
+.home .home-section .list-area .list-item p {
+  font-size: 1.2rem;
+}
+.home .home-section .list-container {
+  position: relative;
+  width: 100%;
+  padding: 0px 50px;
+}
+.home .home-section .list-container .ctrl-container {
+  z-index: 3;
+  display: flex;
+  position: absolute;
+  width: 100%;
+  justify-content: space-between;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.home .home-section .list-container .ctrl-container .ctrl {
+  font-size: 25px;
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  text-align: center;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0.5;
+  color: #632423;
+  cursor: pointer;
+  transition: 0.5s all ease-in-out;
+}
+.home .home-section .list-container .ctrl-container .ctrl:hover {
+  opacity: 1;
+}
+.home .home-section .list-container .ctrl-container .ctrl.prev {
+  left: 5px;
+}
+.home .home-section .list-container .ctrl-container .ctrl.next {
+  right: 5px;
+}
+.home .home-section .list-container .ctrl-container .ctrl + .ctrl {
+  margin-left: 10px;
+}
+@media (max-width: 770px) {
+  .home .home-section .list-container .ctrl-container {
+    justify-content: center;
+  }
+}
+.home .home-section .list-container .alice-carousel {
+  height: calc(100% - 25px);
+}
+.home .home-section .list-container .alice-carousel div {
+  height: 100%;
+}
+.home .home-section .list-container .alice-carousel div div {
+  height: initial;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper {
+  height: 100%;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li {
+  height: 100%;
+  text-align: center;
+  padding: 5px;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li .item-container {
+  padding: 15px 7px 7px;
+  border-top: 3px solid #ffffff;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li .item-container .img-container {
+  overflow: hidden;
+  height: 300px;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li .item-container .img-container img {
+  height: 100%;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li .item-container p {
+  font-size: 1.5rem;
+  color: #632423;
+  margin: 10px 0px;
+}
+.home .home-section .list-container .alice-carousel div .alice-carousel__wrapper ul li .item-container .obituaryLink {
+  color: #632423;
+  font-size: 1.2rem;
 }
 body,
 html {
@@ -213,4 +323,46 @@ html {
 .page-body {
   padding-top: 55px;
   min-height: 100vh;
+}
+/* Components */
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 40px;
+}
+.btn-container .page-btn {
+  padding: 5px 25px;
+  font-family: 'Goudy Old Style Bold';
+  border-radius: 20px;
+  transition: 0.5s all ease-in-out;
+  -webkit-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  -moz-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  cursor: pointer;
+}
+.btn-container .page-btn i {
+  margin-left: 7px;
+}
+.btn-container .page-btn:hover {
+  text-decoration: none;
+}
+.btn-container .page-btn.c1 {
+  background: #632423;
+  color: #ffffff;
+  border: 1px solid #632423;
+}
+.btn-container .page-btn.c1:hover {
+  background: #ffffff;
+  color: #632423;
+}
+.btn-container .page-btn.c2 {
+  background: #f7d38b;
+  color: #000000;
+  border: 1px solid #f7d38b;
+}
+.btn-container .page-btn.c2:hover {
+  background: rgba(255, 255, 255, 0);
+  color: #f7d38b;
 }
