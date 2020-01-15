@@ -35,6 +35,8 @@ class Home extends Component{
                 {id:6, name:"No Name", imgurl:null}
             ]
         }
+
+        this.loadMap = this.loadMap.bind(this);
     }
 
     buildCarouselList(){
@@ -49,6 +51,26 @@ class Home extends Component{
                 </div>
             ))
         )
+    }
+
+    loadMap() {
+        var self = this;
+        try {
+            var map = new mapboxgl.Map({
+                container: this.mapContainer,
+                style: 'https://tiles.stadiamaps.com/styles/alidade_smooth.json',  // Theme URL; see our themes documentation for more options
+                center: [-73.7622429, 40.6921173],  
+                zoom: 4
+              });
+
+              mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.1/mapbox-gl-rtl-text.js');
+
+              // Add zoom and rotation controls to the map.
+              map.addControl(new mapboxgl.NavigationControl());
+        }
+        catch(ex){
+            console.log("Error loading map: ",ex);
+        }
     }
 
     render(){ 
@@ -123,10 +145,18 @@ class Home extends Component{
                                     buttonsDisabled={true} dotsDisabled={true} ref={(el) => (this.Carousel = el)}/>                       
                     </div>
                 </div>
+
+                <div className="home-section location-map">
+                    <div className="contact-container">
+                        <div className="contactmap" ref={el => this.mapContainer = el}></div>
+                    </div>
+                </div>
             </div>
         );
     }
     
-    componentDidMount(){}
+    componentDidMount(){
+        this.loadMap();
+    }
 }
 export default Home;
