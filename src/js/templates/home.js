@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css";
 
+import mapboxgl from 'mapbox-gl';
+
 /* Images */
 import defaultImgAlt from '../../assets/imgs/logo_c1.png';
 import home1 from '../../assets/imgs/home1.jpeg';
@@ -58,15 +60,48 @@ class Home extends Component{
         try {
             var map = new mapboxgl.Map({
                 container: this.mapContainer,
-                style: 'https://tiles.stadiamaps.com/styles/alidade_smooth.json',  // Theme URL; see our themes documentation for more options
-                center: [-73.7622429, 40.6921173],  
-                zoom: 4
+                style: 'https://tiles.stadiamaps.com/styles/osm_bright.json', 
+                center: [ -73.760057, 40.692149],  
+                zoom: 15
               });
 
-              mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.1/mapbox-gl-rtl-text.js');
+              //map.addControl(new mapboxgl.NavigationControl());
 
-              // Add zoom and rotation controls to the map.
-              map.addControl(new mapboxgl.NavigationControl());
+              // Add Marker
+              var markerCollection = {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-73.760057, 40.692149]
+                    },
+                    "properties": {
+                        "title": "Roy L. Gilmore Funeral Home"
+                    }
+                }]
+            };
+
+            // Next, we can add markers to the map
+            markerCollection.features.forEach(function(point) {
+                var elem = document.createElement('div');
+                elem.className = 'marker';
+
+                // Now, we construct a marker and set it's coordinates from the GeoJSON. Note the coordinate order.
+                var marker = new mapboxgl.Marker(elem);
+                marker.setLngLat(point.geometry.coordinates);
+
+                // You can also create a popup that gets shown when you click on a marker. You can style this using
+                // CSS as well if you so desire. A minimal example is shown. The offset will depend on the height of your image.
+                var popup = new mapboxgl.Popup({ offset: 24, closeButton: false });
+                popup.setHTML('<div>' + point.properties.title + '</div>');
+
+                // Set the marker's popup.
+                marker.setPopup(popup);
+
+                // Finally, we add the marker to the map.
+                marker.addTo(map);
+            });
         }
         catch(ex){
             console.log("Error loading map: ",ex);
@@ -83,7 +118,7 @@ class Home extends Component{
                         <img src={home3} />
                     </div>
                     <div className="cover-text">
-                        <h1>Roy L. Gilmore Funeral Home</h1>
+                        <h1>Roy L. Gilmore Funeral Home Inc.</h1>
                         <p><span>&ldquo;</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
                         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<span>&rdquo;</span></p>
                     </div>
@@ -148,6 +183,24 @@ class Home extends Component{
 
                 <div className="home-section location-map">
                     <div className="contact-container">
+                        <div className="contact-info">
+                            <h2>Come Visit Us</h2>
+                            <p className="intro">We are here for you and your family for any questions <br/> please contact us or come in to speak with us directly.</p>
+                            
+                            <h3>Roy L Gilmore's Funeral Home</h3>
+                            <p className="address">19102 Linden Blvd.</p>
+                            <p className="address">Jamaica, NY 11412</p>
+
+                            <p className="phone">(111) 222-3344</p>
+
+                            <h3>Hours Of Operation</h3>
+                            <p className="hours">
+                                <span>Mon-Fri: 9am - 5pm</span>
+                                <span>Sat: 11am - 4pm</span>
+                                <span>Sun: Closed</span>
+                            </p>
+                            
+                        </div>
                         <div className="contactmap" ref={el => this.mapContainer = el}></div>
                     </div>
                 </div>

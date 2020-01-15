@@ -73,7 +73,11 @@ class App extends Component{
                     { routes.map((route, i) => <SiteRoutes key={i} {...route} />) }
 
                     {/* Footer */}
-                    <div className="footer"></div>
+                    <div className="footer">
+                        <div className="footer-section"></div>
+                        <div className="footer-section"></div>
+                        <div className="footer-section"></div>
+                    </div>
                 </div>                
             </Router>
         )
