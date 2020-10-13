@@ -1,4 +1,5 @@
 @mobile-device: ~"(max-width: 770px)";
+@mobile-nav: ~"(max-width: 992px)";
 
 /* Colors */
 @color1: rgba(99,36,35,1);
@@ -132,54 +133,129 @@ body, html {
         &+.nav-item { margin-left: 40px; @media @mobile-device { margin-left: initial; }}
     }
 
-    .nav-right { margin-right: 20%; @media @mobile-device { margin-right: initial; }}
-    .nav-left { margin-left: 20%; @media @mobile-device { margin-left: initial; }}
+    .nav-right { 
+        width: calc(50% - 50px);
+        justify-content: flex-start;
+        @media @mobile-device { margin-right: initial; }
+    }
+    .nav-left { 
+        width: calc(50% - 50px);
+        justify-content: flex-end;         
+        @media @mobile-device { margin-left: initial; }
+    }
 }
 
+/* Mobile Nav */
+.noscroll { overflow: hidden; }
 
+.sidenav-container {
+    display: none;
+    position: fixed;
+    top:0;
+    left:100vw;
+    z-index: 1001;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(52,58,64,1);
+    transition: 0.5s all ease-in-out;
+    padding: @mobileNavHeight 0 20px;
+    color: rgba(255,255,255,1);
+
+    .nav-close { 
+        position: absolute;
+        top: 40px;
+        right: 60px;
+        opacity: 0;
+        color: rgba(255,255,255,1);         
+    }
+    .sidenav-section {
+        display: flex;
+        flex-direction: column; 
+        padding: 0 15%;       
+        .sidenav-link { 
+            font-size: 25px; 
+            color:  rgba(255,255,255,1) !important;
+            &+.sidenav-link { margin-top: 20px; }
+        }
+        .sidenav-header-link {
+            border: 3px solid rgba(255,255,255,.5);
+            text-align: center;
+            display: block;
+            padding: 2px;
+            font-size: 20px;
+            font-weight: bold;
+            color: rgba(255,255,255,1) !important;
+
+            &+.sidenav-header-link { margin-top: 7px; }
+        }
+        
+        &+.sidenav-section { margin-top: 40px;}
+        &.title { 
+            padding: 20px 15%;
+            font-size: 40px; 
+            border-top: 2px solid @color2;
+            color: @color2 !important;
+        }
+    }    
+
+    &.active { 
+        left:0; 
+        .nav-close { 
+            animation-name: background-appear; 
+            animation-duration: 0.7s; 
+            animation-delay: 0.4s;
+            animation-fill-mode: forwards; 
+        }
+    }
+    @media @mobile-nav { display: block;}
+}
+
+/* Page Body */
 .page-body {
     padding-top: 55px;
     min-height: 100vh;
 }
 
-.footer {
-    background: rgba(50,50,50,1);
-    height: 200px;
+/* Common Items */
+.lifted {
+    -moz-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Components */
-.btn-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 10px;
-    margin-top: 40px;
 
-    .page-btn {
-        padding: 5px 25px;
-        font-family: 'Goudy Old Style Bold';
-        border-radius: 20px;
-        transition: 0.5s all ease-in-out;
-        -webkit-box-shadow: 0 10px 6px -6px rgba(50,50,50,0.5);
-	    -moz-box-shadow: 0 10px 6px -6px rgba(50,50,50,0.5);
-            box-shadow: 0 10px 6px -6px rgba(50,50,50,0.5);
-        cursor: pointer;
-        
-        i { margin-left: 7px; }
-        &:hover { text-decoration: none;}
+/* Icons */
+.close-nav { 
+    width: 27px;
+    height: 27px;
+    position: relative;
+    &:before, &:after {
+        position: absolute;
+        left: 14px;
+        content: ' ';
+        height: 28px;
+        width: 2px;
+        background-color: rgba(255,255,255,1);
+    }
+    &:before { transform: rotate(45deg); }
+    &:after { transform: rotate(-45deg); }
+}
 
-        &.c1 { 
-            background: @color1; 
-            color: rgba(255,255,255,1);
-            border: 1px solid @color1;
-            &:hover { background: rgba(255,255,255,1); color:@color1;}
-        }
+/* Animation key frames */
+@keyframes page-nav-slide {
+    from {
+        margin-top: @mobileNavHeight;
+    }
+    to {
+        margin-top: 0;
+    }
+}
 
-        &.c2 { 
-            background: @color2; 
-            color: rgba(0,0,0,1);
-            border: 1px solid @color2;
-            &:hover { background: rgba(255,255,255,0); color:@color2;}
-        }
+@keyframes background-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
