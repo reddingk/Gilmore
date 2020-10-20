@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class UC extends Component{
     
+    componentDidMount(){ }
     render(){  
         return(
             <div className="page-body home">

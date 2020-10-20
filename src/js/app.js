@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink  } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 /* Styles */
@@ -11,11 +11,12 @@ import Home from './templates/home';
 
 /* Images */
 import logo_c from '../assets/imgs/logo_c1.png';
+import logo_w from '../assets/imgs/logo_w.png';
 
 const history = createBrowserHistory(); 
 
 const routes = [
-    { path:"/contactUs", component:UC}
+    { path:"/Obituaries", component:UC}
 ];
 
 const SiteRoutes = route => (
@@ -27,10 +28,10 @@ function MobileNav(props){
         <div className={"sidenav-container" + (props.sidebarOpen ? " active": "")}>
             <div className="nav-close" onClick={() => props.setSidebarDisplay(false)}><span className="close-nav" /></div>
             <div className="sidenav-section">
-                <a className="sidenav-link" href="#Aboutus">About Us</a>
-                <a className="sidenav-link" href="#Preparing">Preparing For A Funeral</a>
-                <a className="sidenav-link" href="#Obituaries">Obituaries</a>
-                <a className="sidenav-link" href="#ContactUs">Contact Us</a>
+                <a className="sidenav-link" href="/#aboutus">About Us</a>
+                <a className="sidenav-link" href="/#preparing">Preparing For A Funeral</a>
+                <NavLink className="sidenav-link" to="/obituaries">Obituaries</NavLink>
+                <a className="sidenav-link" href="/#contactus">Contact Us</a>
             </div>
 
             <div className="sidenav-section title">
@@ -44,9 +45,12 @@ class App extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            sidebarOpen: false
+            sidebarOpen: false,
+            copyrightDate:"2020",
+            pageLoc:""
         };
         this.setSidebarDisplay = this.setSidebarDisplay.bind(this);
+        this.changePageLoc = this.changePageLoc.bind(this);
     }
 
     setSidebarDisplay(status) {
@@ -55,7 +59,24 @@ class App extends Component{
         });
     }
 
-    componentDidMount(){}
+    changePageLoc(page){
+        this.setState({ pageLoc:page });
+    }
+
+    componentDidMount(){
+        var self = this;
+        try {
+            window.addEventListener('scroll', function(){
+                var scrollPg = document.getElementById("scroll-page");
+                if(!scrollPg){
+                    self.changePageLoc("");
+                }
+            });
+        }
+        catch(ex){
+            console.log("[Error] checking scroll loc: ", ex);
+        }
+    }
 
     render(){    
         return( 
@@ -77,23 +98,40 @@ class App extends Component{
 
                         <div className="collapse navbar-collapse">
                             <div className="navbar-nav nav-left">
-                                <Link className="nav-item nav-link" to="/">About Us</Link>
-                                <Link className="nav-item nav-link" to="/">Preparing For A Funeral</Link>
+                                <a className={"nav-item nav-link" + (this.state.pageLoc === "aboutus"? " selected":"")} href="/#aboutus" >About Us</a>
+                                <a className={"nav-item nav-link" + (this.state.pageLoc === "preparing"? " selected":"")} href="/#preparing">Preparing For A Funeral</a>
                             </div>
                            
                             <div className="navbar-nav ml-auto nav-right">
-                                <Link className="nav-item nav-link" to="/">Obituaries</Link>
-                                <Link className="nav-item nav-link" to="/">Contact Us</Link>
+                                <NavLink className="nav-item nav-link" to="/obituaries" activeClassName="selected">Obituaries</NavLink>
+                                <a className={"nav-item nav-link" + (this.state.pageLoc === "contactus"? " selected":"")} href="/#contactus">Contact Us</a>
                             </div>
                         </div>
                     </nav>
 
-                    {/* Body */}
-                    <Route exact path="/" component={Home} />
-                    { routes.map((route, i) => <SiteRoutes key={i} {...route} />) }
+                    {/* Body */}                    
+                    <Route exact path="/" render={props => ( <Home {...props} changePageLoc={this.changePageLoc}/>)} />
+                    {/*<Route exact path="/" component={Home} />*/}
+                    { routes.map((route, i) => <SiteRoutes key={i} {...route} changePageLoc={this.changePageLoc} />) }
                     
                     {/* Footer */}
-                    <div className="footer" />
+                    <div className="footer">
+                        <div className="footer-section logo-section">
+                            <img src={logo_w} alt="Gilmore Funeral Home Crest"/>
+                            <div className="logo-text">
+                                <div>Roy L. Gilmore</div>
+                                <div>Funeral Home, Inc.</div>
+                            </div>
+                        </div>
+                        <div className="footer-section icon-section">
+                            <i className="fas fa-phone"/>
+                            <span>(718) 529-3030</span>
+                        </div>
+                        <div className="footer-section icon-section">
+                            <i className="far fa-copyright"/>
+                            <span>{this.state.copyrightDate}. Roy L. Gilmore Funeral Home Inc. All Rights Reserved.</span>
+                        </div>
+                    </div>
                 </div>
             </Router>
         )
