@@ -292,8 +292,12 @@
                 margin-top: 30px;
                 line-break: auto;
                 .info-line {
-                    &.title { color: @color2; border-bottom: 2px solid @color2; margin-bottom: 10px;}
-                    span { margin-right: 7px; font-weight: bold;}
+                    span:not(.mini) { margin-right: 7px; font-weight: bold;}
+
+                    &.title { color: @color2; border-bottom: 2px solid @color2; margin-bottom: 10px;}                   
+                    @media @mobile-nav { 
+                        .mini { display: block; font-size: 1.2rem; margin-left: 5px; }
+                    }
                 }
             }
         }

@@ -447,7 +447,7 @@ class Home extends Component{
                             <div className="info-line title">Contact Information</div>
                             <div className="info-line"><span>Phone</span>(718) 529-3030</div>
                             <div className="info-line"><span>Fax</span>(718) 528-2575</div>
-                            <div className="info-line"><span>Email</span>royl.gilmorefuneralhome@verizon.net</div>
+                            <div className="info-line mini"><span>Email</span><span className="mini">royl.gilmorefuneralhome@verizon.net</span></div>
                         </div>
                     </div>
                     <div className="contact-form">

@@ -425,14 +425,21 @@
   margin-top: 30px;
   line-break: auto;
 }
+.home .contactUs .contact-info .contact-lines .info-line span:not(.mini) {
+  margin-right: 7px;
+  font-weight: bold;
+}
 .home .contactUs .contact-info .contact-lines .info-line.title {
   color: #f7d38b;
   border-bottom: 2px solid #f7d38b;
   margin-bottom: 10px;
 }
-.home .contactUs .contact-info .contact-lines .info-line span {
-  margin-right: 7px;
-  font-weight: bold;
+@media (max-width: 992px) {
+  .home .contactUs .contact-info .contact-lines .info-line .mini {
+    display: block;
+    font-size: 1.2rem;
+    margin-left: 5px;
+  }
 }
 .home .contactUs .contact-form {
   flex: 1;
