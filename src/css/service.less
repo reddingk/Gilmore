@@ -1,0 +1,91 @@
+.services {
+    .sub-header {
+        min-height: 40vh;
+        padding: 20px 15%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .color3(background, 0.9);
+        color: #000;
+        border-bottom-left-radius: 250px;
+        .header-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            .sub-content {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                flex:1;
+                padding: 20px;
+                &.sub-title { 
+                    h1 { font-size: 3.5rem; }               
+                }
+                &.sub-text {
+                    border-left: 1px solid rgba(0,0,0,0.3);
+                    font-size: 1.5rem;
+                }
+            }
+            
+        }
+    }
+    .service-list {
+        min-height: 100vh;
+        padding: 100px 7%;
+        .list-header { 
+            margin: 20px 0 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .search-container { display: flex; flex-direction: column; justify-content: flex-end; width: 250px;}
+            .search-field {
+                display: flex;
+                flex-direction: row;
+                border-bottom: 1px solid rgba(150,150,150,1);
+                i { 
+                    color: rgba(150,150,150,1); 
+                    margin-right: 7px; 
+                    padding: 5px 0;
+                    display: flex; flex-direction: column; justify-content: flex-end;
+                }
+                input {
+                    border: none;
+                    outline: none;                    
+                }
+            }
+        }
+        .service-table {
+            width: 100%;
+            text-align: left;
+            font-size: 1.3rem;
+            th,td { padding: 15px; transition: 0.5s all ease-in-out;}
+
+            thead {
+                //background: @color1;
+                //color:#fff;
+                font-size: 1.5rem;
+                font-weight: bold;
+                border-bottom: 4px solid @color1;                           
+            }
+            tbody {
+                tr{
+                    &:nth-child(even) { background: rgba(100,100,100,0.2);}
+                    &+tr { border-top: 1px solid #000;}
+
+                    &:hover { td { padding-left: 25px; padding-right: 5px; }}
+                }                
+            }
+        }
+
+        .table-control { 
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 15px 0;
+
+            .page-info { font-size: 1.3rem; color: @color1; margin-right: 7px; font-weight: bold;}
+        }
+    }
+}

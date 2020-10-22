@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import "../css/app.less";
 
 /* Components */
-import UC from './templates/uc';
+import ServiceSchedule from './templates/serviceschedule';
 import Home from './templates/home';
 
 /* Images */
@@ -16,7 +16,7 @@ import logo_w from '../assets/imgs/logo_w.png';
 const history = createBrowserHistory(); 
 
 const routes = [
-    { path:"/Obituaries", component:UC}
+    { path:"/serviceschedule", component:ServiceSchedule}
 ];
 
 const SiteRoutes = route => (
@@ -30,7 +30,7 @@ function MobileNav(props){
             <div className="sidenav-section">
                 <a className="sidenav-link" href="/#aboutus">About Us</a>
                 <a className="sidenav-link" href="/#preparing">Preparing For A Funeral</a>
-                <NavLink className="sidenav-link" to="/obituaries">Obituaries</NavLink>
+                <NavLink className="sidenav-link" to="/serviceschedule">Service Schedule</NavLink>
                 <a className="sidenav-link" href="/#contactus">Contact Us</a>
             </div>
 
@@ -103,7 +103,7 @@ class App extends Component{
                             </div>
                            
                             <div className="navbar-nav ml-auto nav-right">
-                                <NavLink className="nav-item nav-link" to="/obituaries" activeClassName="selected">Obituaries</NavLink>
+                                <NavLink className="nav-item nav-link" to="/serviceschedule" activeClassName="selected">Service Schedule</NavLink>
                                 <a className={"nav-item nav-link" + (this.state.pageLoc === "contactus"? " selected":"")} href="/#contactus">Contact Us</a>
                             </div>
                         </div>

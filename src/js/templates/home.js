@@ -4,6 +4,8 @@ import ProgressBar from 'react-customizable-progressbar'
 import "react-alice-carousel/lib/alice-carousel.css";
 import AliceCarousel from 'react-alice-carousel';
 
+import axios from 'axios';
+
 /* Images */
 import back from '../../assets/imgs/exterior3.jpg';
 
@@ -13,6 +15,7 @@ import Signature from '../components/signature';
 var phraseInfo = null;
 var phraseInfo2 = [];
 var writerStatus = false;
+var rootPath = ( true ? "http://localhost:1245" : "");
 
 class Home extends Component{
     constructor(props) {
@@ -35,13 +38,7 @@ class Home extends Component{
             responsivePhoto: {
                 0: { items: 2 }, 600: { items: 2 }, 1024: { items: 2 }
             },
-            serviceList:[
-                { name:"Joe Smith", location:"Room 101", date:"2020-11-20T17:00:00" },
-                { name:"Betty Wilson", location:"Room 102", date:"2020-11-20T16:00:00" },
-                { name:"AJ Rodger", location:"Room 103", date:"2020-11-22T14:00:00" },
-                { name:"Kathrine Jensah", location:"Room 102", date:"2020-11-24T12:00:00" },
-                { name:"Thomas Hamilton", location:"Room 103", date:"2020-11-25T16:30:00" }
-            ],
+            serviceList:[],
             faqList:[
                 { question:"Why do I have to use a funeral home?", answer:"You are not legally required to use a funeral home to plan and conduct a funeral. But because most of us do not have experience with the details and legal requirements involved, the services of a professional funeral home may be necessary and helpful." },
                 { question:"What happens when someone passes away out of town?", answer:"Funeral directors work together every day to coordinate the shipment of human remains between different cities, states and countries. If someone dies while travelling out-of-town, contact the funeral director in your home town. He or she can work with a local funeral director and the authorities where the death occurred to make arrangements to bring your loved one home. If the death occurs in a city where you or someone you trust is familiar with a local funeral home, you can also contact them for assistance." },
@@ -58,8 +55,9 @@ class Home extends Component{
         }
         
         /* Functions */
-        this.buildEventItems = this.buildEventItems.bind(this);
+        this.getServiceList = this.getServiceList.bind(this);
         this.buildPhotoList = this.buildPhotoList.bind(this);
+        this.buildEventItems = this.buildEventItems.bind(this);        
         this.parseDate = this.parseDate.bind(this);
         this.phraseWriter = this.phraseWriter.bind(this);
         this.typePhrase = this.typePhrase.bind(this);
@@ -70,6 +68,25 @@ class Home extends Component{
         this.submitForm = this.submitForm.bind(this);
     }  
     
+    getServiceList(){
+        var self = this;
+        try {
+            var postData = { search:"", size:10, page:1 };
+            axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
+                .then(function(response) {
+                    if(response.data.errorMessage){
+                        console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
+                    }
+                    else if(response.data.results.list && response.data.results.list.length >= 0){
+                        self.setState({ serviceList: response.data.results.list });
+                    }
+                }); 
+        }
+        catch(ex){
+            console.log(" [Error] Getting Service List: ",ex);
+        }
+    }
+
     buildPhotoList(){
         try {
             var photoList = ["exterior1.jpg","interior1.JPG","interior2.JPG","interior3.JPG","interior4.JPG","interior5.JPG",
@@ -87,22 +104,27 @@ class Home extends Component{
     }
 
     buildEventItems() {
-        return (
-            this.state.serviceList.map((service, i) => ( 
-                <div className="service-item">
-                    <div className="service-date">
-                        <div className="date-month">{this.parseDate(service.date,"month")}</div>
-                        <div className="date-day">{this.parseDate(service.date,"day")}</div>
+        try {
+            return (
+                this.state.serviceList.map((service, i) => ( 
+                    <div className="service-item">
+                        <div className="service-date">
+                            <div className="date-month">{this.parseDate(service.date,"month")}</div>
+                            <div className="date-day">{this.parseDate(service.date,"day")}</div>
+                        </div>
+        
+                        <div className="service-info">
+                            <div className="info title">{service.name}</div>
+                            <div className="info">{service.location}</div>
+                            <div className="info">{this.parseDate(service.date,"time")}</div>
+                        </div>
                     </div>
-
-                    <div className="service-info">
-                        <div className="info title">{service.name}</div>
-                        <div className="info">{service.location}</div>
-                        <div className="info">{this.parseDate(service.date,"time")}</div>
-                    </div>
-                </div>
-            ))
-        )
+                ))
+            )            
+        }
+        catch(ex){
+            console.log(" [Error] Building Event Items: ",ex);
+        }
     }
 
     parseDate(stdate, type){
@@ -292,6 +314,7 @@ class Home extends Component{
         try {
             window.scrollTo(0, 0);
             this.pageLocation();
+            this.getServiceList();
             this.phraseWriter(this.state.introPhrase, function(){ 
                 writerStatus = true;
                 self.setState({ signature: true });
@@ -330,12 +353,14 @@ class Home extends Component{
                     {/* Service Time Tool */}
                     <div className="serviceTime-scroller lifted">
                         <div className="scroller-title">Our Services</div>
-                        <div className="scroller-container">
-                            <AliceCarousel className="scroller-carousel" items={this.buildEventItems()}
-                                autoPlayInterval={4000} disableDotsControls disableButtonsControls 
-                                mouseTracking autoPlay infinite
-                                responsive={this.state.responsive} ref={ el => this.Carousel = el }/>
-                        </div>
+                        {this.state.serviceList.length > 0 && 
+                            <div className="scroller-container">
+                                <AliceCarousel className="scroller-carousel" items={this.buildEventItems()}
+                                    autoPlayInterval={4000} disableDotsControls disableButtonsControls 
+                                    mouseTracking autoPlay infinite
+                                    responsive={this.state.responsive} ref={ el => this.Carousel = el }/>
+                            </div>
+                        }
                     </div>
                 </section>
                 
