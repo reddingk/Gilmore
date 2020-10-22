@@ -30,12 +30,13 @@ function MobileNav(props){
             <div className="sidenav-section">
                 <a className="sidenav-link" href="/#aboutus">About Us</a>
                 <a className="sidenav-link" href="/#preparing">Preparing For A Funeral</a>
-                <NavLink className="sidenav-link" to="/serviceschedule">Service Schedule</NavLink>
                 <a className="sidenav-link" href="/#contactus">Contact Us</a>
+                <NavLink className="sidenav-link" to="/serviceschedule">Service Schedule</NavLink>                
             </div>
 
             <div className="sidenav-section title">
                 <h1 className="sidenav-title">Roy L. Gilmore Funeral Home Inc.</h1>
+                <p>(718) 529-3030</p>
             </div>
         </div>
     );

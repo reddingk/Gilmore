@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-var rootPath = ( true ? "http://localhost:1245" : "");
+var rootPath = ( false ? "http://localhost:1245" : "");
 
 class ServiceSchedule extends Component{
     constructor(props) {

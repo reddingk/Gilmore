@@ -206,7 +206,8 @@ body, html {
             font-size: 40px; 
             border-top: 2px solid @color2;
             color: @color2 !important;
-        }
+            p { font-size: 25px; color: @color3 !important;}
+        }        
     }    
 
     &.active { 
@@ -248,7 +249,11 @@ body, html {
             }
             i { margin-right: 7px; }
         }
+
+        @media @mobile-nav { justify-content: center; &+.footer-section { margin-top: 15px; }}
     }
+
+    @media @mobile-nav { flex-direction: column; }
 }
 /* Common Items */
 .lifted {
@@ -278,7 +283,9 @@ body, html {
         &+.ctrl-item { margin-left: 5px;}                    
     }
     @media @mobile-nav { 
-        .ctrl-item { font-size: 40px;}
+        .ctrl-item { 
+            font-size: 30px;
+        }
     }
 }
 

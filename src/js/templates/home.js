@@ -15,7 +15,7 @@ import Signature from '../components/signature';
 var phraseInfo = null;
 var phraseInfo2 = [];
 var writerStatus = false;
-var rootPath = ( true ? "http://localhost:1245" : "");
+var rootPath = ( false ? "http://localhost:1245" : "");
 
 class Home extends Component{
     constructor(props) {
@@ -45,6 +45,14 @@ class Home extends Component{
                 { question:"Do I need a funeral director?", answer:"In New York State, a licensed funeral director is required to make funeral arrangements and make the final disposition of the body. In addition to providing for the final disposition of human remains, the funeral director is a caregiver, listener and coordinator. As a caregiver, the funeral director helps the survivors make choices regarding the funeral and disposition. The funeral director is trained to listen and help survivors cope with their loss and when necessary, be able to make a referral to other professionals for additional help. An important function of the funeral director is to relieve the survivors of having to make arrangements for a religious or fraternal service, preparing a death notice, ordering flowers and arranging for a burial or cremation." },
                 { question:"Why have funeral ceremonies?", answer:"Funerals are age-old rituals that serve to honor the deceased. What has been found to be of equal importance is that the funeral also helps the survivors cope with the loss by playing an important part in the grief process. We all go through a psychological change with the loss of a loved one. The grief process, as the change is called, helps us live with the loss. The funeral helps us to initiate behaviors that might not be available to us without the funeral." }
             ],
+            testimonialList:[
+                { info:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Wilson Family"},
+                { info:"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Jackson Family"},
+                { info:"Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Bridge Family"},
+                { info:"Aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Maximon Family"},
+                { info:"Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Falls Family"},
+                { info:"Guis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Acura Family"}
+            ],
             formData:{"name":"", "email":"", "phone":"","message":""},
             contactForm:[
                 {"type":"input-line","sz":10, "required":true, "name":"name", "placeholder":"Name"},
@@ -57,7 +65,8 @@ class Home extends Component{
         /* Functions */
         this.getServiceList = this.getServiceList.bind(this);
         this.buildPhotoList = this.buildPhotoList.bind(this);
-        this.buildEventItems = this.buildEventItems.bind(this);        
+        this.buildEventItems = this.buildEventItems.bind(this);   
+        this.buildTestimonialList = this.buildTestimonialList.bind(this);     
         this.parseDate = this.parseDate.bind(this);
         this.phraseWriter = this.phraseWriter.bind(this);
         this.typePhrase = this.typePhrase.bind(this);
@@ -107,7 +116,7 @@ class Home extends Component{
         try {
             return (
                 this.state.serviceList.map((service, i) => ( 
-                    <div className="service-item">
+                    <div className="service-item" key={i}>
                         <div className="service-date">
                             <div className="date-month">{this.parseDate(service.date,"month")}</div>
                             <div className="date-day">{this.parseDate(service.date,"day")}</div>
@@ -118,6 +127,22 @@ class Home extends Component{
                             <div className="info">{service.location}</div>
                             <div className="info">{this.parseDate(service.date,"time")}</div>
                         </div>
+                    </div>
+                ))
+            )            
+        }
+        catch(ex){
+            console.log(" [Error] Building Event Items: ",ex);
+        }
+    }
+
+    buildTestimonialList(){
+        try {
+            return (
+                this.state.testimonialList.map((test, i) => ( 
+                    <div className="testimonial-item" key={i}>
+                        <p className="test-info"><i class="fas fa-quote-left" />{test.info}<i class="fas fa-quote-right" /></p>
+                        <p className="test-name">{test.name}</p>
                     </div>
                 ))
             )            
@@ -408,7 +433,6 @@ class Home extends Component{
                         <p>The "family-owned" personal touch of funeral service is prevalent in all we do. Serving all denominations and faiths; celebrations of life.</p>
                     </div>
                 </section>
-
                 
                 <section className="contactUs" id="contactus">
                     <div className="contact-info">
@@ -435,7 +459,12 @@ class Home extends Component{
                             <div className="lBtn lifted" onClick={this.submitForm}><span>Submit</span><i className="btn-icon far fa-paper-plane"></i></div>
                         </div>
                     </div>                    
-                </section>     
+                </section>  
+
+                <section className="testimonials">
+                    <h1>Testimonial</h1>
+                    <AliceCarousel className="testimonial-scroller" items={this.buildTestimonialList()} autoPlayInterval={7000} disableButtonsControls mouseTracking responsive={this.state.responsive} />   
+                </section>   
             </div>
         );
     }

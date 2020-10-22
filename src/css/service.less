@@ -20,15 +20,18 @@
                 flex:1;
                 padding: 20px;
                 &.sub-title { 
-                    h1 { font-size: 3.5rem; }               
+                    h1 { font-size: 3.5rem; @media @mobile-nav { font-size: 2.5rem;}}               
                 }
                 &.sub-text {
                     border-left: 1px solid rgba(0,0,0,0.3);
                     font-size: 1.5rem;
+                    @media @mobile-nav { font-size: 1rem; border-left: none; border-top: 1px solid rgba(0,0,0,0.3);}
                 }
             }
-            
+            @media @mobile-nav { flex-direction: column;}
         }
+
+        @media @mobile-nav { margin-top:50px; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;}
     }
     .service-list {
         min-height: 100vh;
@@ -55,6 +58,7 @@
                     outline: none;                    
                 }
             }
+            @media @mobile-nav { flex-direction: column;}
         }
         .service-table {
             width: 100%;
@@ -62,12 +66,11 @@
             font-size: 1.3rem;
             th,td { padding: 15px; transition: 0.5s all ease-in-out;}
 
-            thead {
-                //background: @color1;
-                //color:#fff;
+            thead {                
                 font-size: 1.5rem;
                 font-weight: bold;
-                border-bottom: 4px solid @color1;                           
+                border-bottom: 4px solid @color1;   
+                @media @mobile-nav { font-size: 1.1rem;}                        
             }
             tbody {
                 tr{
@@ -77,6 +80,8 @@
                     &:hover { td { padding-left: 25px; padding-right: 5px; }}
                 }                
             }
+
+            @media @mobile-nav { font-size: 1rem;}
         }
 
         .table-control { 
@@ -87,5 +92,7 @@
 
             .page-info { font-size: 1.3rem; color: @color1; margin-right: 7px; font-weight: bold;}
         }
+
+        @media @mobile-nav { padding: 100px 5%; }
     }
 }
