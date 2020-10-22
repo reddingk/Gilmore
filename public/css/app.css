@@ -370,6 +370,7 @@
 @media (max-width: 992px) {
   .home .preparing .prep-faq {
     margin-top: 20px;
+    padding: 0 5%;
   }
 }
 .home .preparing .prep-text {
@@ -422,6 +423,7 @@
 }
 .home .contactUs .contact-info .contact-lines {
   margin-top: 30px;
+  line-break: auto;
 }
 .home .contactUs .contact-info .contact-lines .info-line.title {
   color: #f7d38b;
@@ -992,7 +994,7 @@ html {
   background: #323232;
   display: flex;
   flex-direction: row;
-  padding: 10px 2%;
+  padding: 10px 5%;
   color: #fff;
 }
 .footer .footer-section {
