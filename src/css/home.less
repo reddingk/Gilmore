@@ -93,8 +93,29 @@
 
                 @media @mobile-nav { width: 100%; margin-left: 0;  }
             }
-        }
 
+            #signature2 {
+                width:605px;
+                height: 170px;
+                margin-left: 100px;
+                line,path {
+                    fill: none;
+                    stroke: #fff;
+                    stroke-width: 2;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    stroke-miterlimit: 10;
+                }
+    
+                .sig-line { 
+                    &.line2 { stroke-dasharray: 1200; animation: write21 3s linear;}
+                    &.line4 { stroke-dasharray: 1200; animation: write22 3s linear;}                    
+                }
+    
+                @media @mobile-nav { width: 100%; margin-left: 0;  }
+            }
+        }
+        
         .serviceTime-scroller {
             position: absolute;
             bottom: -10px;
@@ -462,5 +483,16 @@
 
 @keyframes write4 {
     0%, 75% { stroke-dashoffset: 1100; }
+    100% { stroke-dashoffset: 0; }
+}
+
+/* Sig 2 */
+@keyframes write21 {
+    0%{ stroke-dashoffset: 1200; }
+    50% { stroke-dashoffset: 0; }
+}
+
+@keyframes write22 {
+    0%, 50% { stroke-dashoffset: 1200; }
     100% { stroke-dashoffset: 0; }
 }

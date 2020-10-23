@@ -28,10 +28,10 @@ function MobileNav(props){
         <div className={"sidenav-container" + (props.sidebarOpen ? " active": "")}>
             <div className="nav-close" onClick={() => props.setSidebarDisplay(false)}><span className="close-nav" /></div>
             <div className="sidenav-section">
-                <a className="sidenav-link" href="/#aboutus">About Us</a>
-                <a className="sidenav-link" href="/#preparing">Preparing For A Funeral</a>
-                <a className="sidenav-link" href="/#contactus">Contact Us</a>
-                <NavLink className="sidenav-link" to="/serviceschedule">Service Schedule</NavLink>                
+                <a className="sidenav-link" href="/#aboutus" onClick={() => props.setSidebarDisplay(false)}>About Us</a>
+                <a className="sidenav-link" href="/#preparing" onClick={() => props.setSidebarDisplay(false)}>Preparing For A Funeral</a>
+                <a className="sidenav-link" href="/#contactus" onClick={() => props.setSidebarDisplay(false)}>Contact Us</a>
+                <NavLink className="sidenav-link" to="/serviceschedule" onClick={() => props.setSidebarDisplay(false)}>Service Schedule</NavLink>                
             </div>
 
             <div className="sidenav-section title">

@@ -10,7 +10,7 @@ import axios from 'axios';
 import back from '../../assets/imgs/exterior3.jpg';
 
 /* Components */
-import Signature from '../components/signature';
+import Signature from '../components/signature2';
 
 var phraseInfo = null;
 var phraseInfo2 = [];

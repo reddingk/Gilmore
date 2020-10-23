@@ -187,6 +187,34 @@
     margin-left: 0;
   }
 }
+.home .landing-section .text-cover #signature2 {
+  width: 605px;
+  height: 170px;
+  margin-left: 100px;
+}
+.home .landing-section .text-cover #signature2 line,
+.home .landing-section .text-cover #signature2 path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}
+.home .landing-section .text-cover #signature2 .sig-line.line2 {
+  stroke-dasharray: 1200;
+  animation: write21 3s linear;
+}
+.home .landing-section .text-cover #signature2 .sig-line.line4 {
+  stroke-dasharray: 1200;
+  animation: write22 3s linear;
+}
+@media (max-width: 992px) {
+  .home .landing-section .text-cover #signature2 {
+    width: 100%;
+    margin-left: 0;
+  }
+}
 .home .landing-section .serviceTime-scroller {
   position: absolute;
   bottom: -10px;
@@ -248,6 +276,7 @@
   .home .landing-section .serviceTime-scroller {
     width: 100%;
     border-radius: 0;
+    overflow: hidden;
   }
 }
 .home .about {
@@ -648,6 +677,24 @@
   0%,
   75% {
     stroke-dashoffset: 1100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+/* Sig 2 */
+@keyframes write21 {
+  0% {
+    stroke-dashoffset: 1200;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write22 {
+  0%,
+  50% {
+    stroke-dashoffset: 1200;
   }
   100% {
     stroke-dashoffset: 0;
