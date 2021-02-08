@@ -54,21 +54,25 @@
             font-family: 'Goudy Old Style', serif;
             h1{ 
                 font-weight: bold; 
-                font-size: 3.0rem; 
+                font-size: 4rem; 
                 color: #fff; 
                 margin-bottom: 10px; 
                 @media @mobile-nav {font-size: 2.2rem;} 
             }
             .writer-text { font-size: 2.3rem; margin-top: 10px; .color1(background, 0.7); padding: 5px;}
             .writer-phrase {
-                margin-top: 10px;
+                margin-top: 10px; height: 0;
+                overflow-y: hidden; 
+                transition: 0.7s all ease-in-out;
                 .line-item {
                     display: inline-block;
                     span { .color1(background, 0.7); padding: 5px; }
                     &.base { font-size: 2.2rem; @media @mobile-nav {font-size: 1.5rem;}}
                     &.line { display: block; background: none !important; margin-top: 20px;}
                     &.title { font-size: 2.5rem; color: @color2; font-weight: bold; @media @mobile-nav {font-size: 1.5rem;}}
-                }               
+                }
+                
+                &.wshow { height: 175px; }
             }
 
             #signature {
@@ -110,6 +114,32 @@
                 .sig-line { 
                     &.line2 { stroke-dasharray: 1200; animation: write21 3s linear;}
                     &.line4 { stroke-dasharray: 1200; animation: write22 3s linear;}                    
+                }
+    
+                @media @mobile-nav { width: 100%; margin-left: 0;  }
+            }
+
+            #signature3 {
+                width: 705px;
+                height: 150px;
+                margin-left: 100px;
+                line,path {
+                    fill: none; stroke: #fff;
+                    stroke-width: 7; stroke-linecap: round;
+                    stroke-linejoin: round; stroke-miterlimit: 10;
+                    //animation-delay: 3s;
+                    //animation: writeFill 0.5s linear;
+                }
+    
+                .sig-line { 
+                    &.line1 { stroke-dasharray: 4000; animation: write31 3s linear, writeFill 0.7s linear .45s forwards ;}
+                    &.line2 { stroke-dasharray: 7500; animation: write32 3s linear, writeFill 0.7s linear .9s forwards;}
+                    &.line21 { stroke-dasharray: 1000; animation: write321 3s linear, writeFill 0.7s linear .9s forwards;}
+                    &.line3 { stroke-dasharray: 7000; animation: write33 3s linear, writeFill 0.7s linear 1.35s forwards ;}
+                    &.line4 { stroke-dasharray: 8000; animation: write34 3s linear, writeFill 0.7s linear 1.8s forwards ;}
+                    &.line41 { stroke-dasharray: 1000; animation: write341 3s linear, writeFill 0.7s linear 1.8s forwards ;}
+                    &.line5 { stroke-dasharray: 10000; animation: write35 3s linear, writeFill 0.7s linear 2.25s forwards ;}
+                    &.line6 { stroke-dasharray: 10000; animation: write36 3s linear, writeFill 0.7s linear 3s forwards ;}                    
                 }
     
                 @media @mobile-nav { width: 100%; margin-left: 0;  }
@@ -229,7 +259,7 @@
     }
 
     .preparing {
-        display: flex;
+        display: block;
         flex-direction: row;
         overflow: hidden;
         padding: 100px 0;
@@ -238,7 +268,8 @@
         .prep-faq { 
             flex: 1;
             padding-left: 5%;
-            display: flex;
+            width: 50%;
+            display: inline-flex;
             flex-direction: column;
             justify-content: center;
             .accordion {
@@ -268,8 +299,9 @@
                     .card-body {
                         padding: 15px 30px;
                         background: @color3;
-                        color: #000;
-                        font-size: 1.2rem;
+                        .color3(background, 0.75);
+                        border-radius: 7px; margin-bottom: 10px;
+                        color: #000; font-size: 1.2rem;
                     }
                 }
             }
@@ -277,15 +309,15 @@
             @media @mobile-nav { margin-top: 20px; padding: 0 5%;}
         }
         .prep-text { 
-            width: 45%;
-            margin-left: 40px;
+            width: calc(50% - 30px);
+            margin-left: 30px;
             background: @color1;
             min-height: 450px;
             color: #fff;
             border-top-left-radius: 250px;
             border-bottom-left-radius: 250px;
             padding: 20px 5% 20px 150px;
-            display: flex;
+            display: inline-flex;
             justify-content: center;
             flex-direction: column;
             h1 { color: @color2;}
@@ -468,12 +500,12 @@
 
 @keyframes write1 {
     0%{ stroke-dashoffset: 300; }
-    25% { stroke-dashoffset: 0; }
+    25% { stroke-dashoffset: 0; fill: #fff;}
 }
 
 @keyframes write2 {
     0%, 25% { stroke-dashoffset: 250; }
-    50% { stroke-dashoffset: 0; }
+    50% { stroke-dashoffset: 0;  fill: #fff;}
 }
 
 @keyframes write3 {
@@ -495,4 +527,50 @@
 @keyframes write22 {
     0%, 50% { stroke-dashoffset: 1200; }
     100% { stroke-dashoffset: 0; }
+}
+
+/* Sig 3 */
+@keyframes write31 {
+    0%{ stroke-dashoffset: 4000;}
+    15% { stroke-dashoffset: 0; }
+}
+
+@keyframes write32 {
+    0%, 15%{ stroke-dashoffset: 7500; }
+    30% { stroke-dashoffset: 0; }
+}
+
+@keyframes write321 {
+    0%, 25%{ stroke-dashoffset: 1000; }
+    30% { stroke-dashoffset: 0; }
+}
+
+@keyframes write33 {
+    0%, 30%{ stroke-dashoffset: 7000; }
+    45% { stroke-dashoffset: 0; }
+}
+
+@keyframes write34 {
+    0%, 45%{ stroke-dashoffset: 8000; }
+    60% { stroke-dashoffset: 0; }
+}
+
+@keyframes write341 {
+    0%, 55%{ stroke-dashoffset: 1000; }
+    60% { stroke-dashoffset: 0; }
+}
+
+@keyframes write35 {
+    0%, 60%{ stroke-dashoffset: 10000; }
+    75% { stroke-dashoffset: 0; }
+}
+
+@keyframes write36 {
+    0%, 75%{ stroke-dashoffset: 10000; }
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes writeFill {
+    0% { fill: rgba(255,255,255,0); }
+    100% { fill: rgba(255,255,255,1); }
 }

@@ -103,7 +103,7 @@
 }
 .home .landing-section .text-cover h1 {
   font-weight: bold;
-  font-size: 3rem;
+  font-size: 4rem;
   color: #fff;
   margin-bottom: 10px;
 }
@@ -120,6 +120,9 @@
 }
 .home .landing-section .text-cover .writer-phrase {
   margin-top: 10px;
+  height: 0;
+  overflow-y: hidden;
+  transition: 0.7s all ease-in-out;
 }
 .home .landing-section .text-cover .writer-phrase .line-item {
   display: inline-block;
@@ -150,6 +153,9 @@
   .home .landing-section .text-cover .writer-phrase .line-item.title {
     font-size: 1.5rem;
   }
+}
+.home .landing-section .text-cover .writer-phrase.wshow {
+  height: 175px;
 }
 .home .landing-section .text-cover #signature {
   width: 484px;
@@ -211,6 +217,58 @@
 }
 @media (max-width: 992px) {
   .home .landing-section .text-cover #signature2 {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+.home .landing-section .text-cover #signature3 {
+  width: 705px;
+  height: 150px;
+  margin-left: 100px;
+}
+.home .landing-section .text-cover #signature3 line,
+.home .landing-section .text-cover #signature3 path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line1 {
+  stroke-dasharray: 4000;
+  animation: write31 3s linear, writeFill 0.7s linear 0.45s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line2 {
+  stroke-dasharray: 7500;
+  animation: write32 3s linear, writeFill 0.7s linear 0.9s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line21 {
+  stroke-dasharray: 1000;
+  animation: write321 3s linear, writeFill 0.7s linear 0.9s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line3 {
+  stroke-dasharray: 7000;
+  animation: write33 3s linear, writeFill 0.7s linear 1.35s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line4 {
+  stroke-dasharray: 8000;
+  animation: write34 3s linear, writeFill 0.7s linear 1.8s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line41 {
+  stroke-dasharray: 1000;
+  animation: write341 3s linear, writeFill 0.7s linear 1.8s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line5 {
+  stroke-dasharray: 10000;
+  animation: write35 3s linear, writeFill 0.7s linear 2.25s forwards;
+}
+.home .landing-section .text-cover #signature3 .sig-line.line6 {
+  stroke-dasharray: 10000;
+  animation: write36 3s linear, writeFill 0.7s linear 3s forwards;
+}
+@media (max-width: 992px) {
+  .home .landing-section .text-cover #signature3 {
     width: 100%;
     margin-left: 0;
   }
@@ -349,7 +407,7 @@
   }
 }
 .home .preparing {
-  display: flex;
+  display: block;
   flex-direction: row;
   overflow: hidden;
   padding: 100px 0;
@@ -358,7 +416,8 @@
 .home .preparing .prep-faq {
   flex: 1;
   padding-left: 5%;
-  display: flex;
+  width: 50%;
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
 }
@@ -393,6 +452,9 @@
 .home .preparing .prep-faq .accordion .card .card-body {
   padding: 15px 30px;
   background: #ebebeb;
+  background: rgba(235, 235, 235, 0.75) !important;
+  border-radius: 7px;
+  margin-bottom: 10px;
   color: #000;
   font-size: 1.2rem;
 }
@@ -403,15 +465,15 @@
   }
 }
 .home .preparing .prep-text {
-  width: 45%;
-  margin-left: 40px;
+  width: calc(50% - 30px);
+  margin-left: 30px;
   background: #632423;
   min-height: 450px;
   color: #fff;
   border-top-left-radius: 250px;
   border-bottom-left-radius: 250px;
   padding: 20px 5% 20px 150px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   flex-direction: column;
 }
@@ -653,6 +715,7 @@
   }
   25% {
     stroke-dashoffset: 0;
+    fill: #fff;
   }
 }
 @keyframes write2 {
@@ -662,6 +725,7 @@
   }
   50% {
     stroke-dashoffset: 0;
+    fill: #fff;
   }
 }
 @keyframes write3 {
@@ -698,6 +762,86 @@
   }
   100% {
     stroke-dashoffset: 0;
+  }
+}
+/* Sig 3 */
+@keyframes write31 {
+  0% {
+    stroke-dashoffset: 4000;
+  }
+  15% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write32 {
+  0%,
+  15% {
+    stroke-dashoffset: 7500;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write321 {
+  0%,
+  25% {
+    stroke-dashoffset: 1000;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write33 {
+  0%,
+  30% {
+    stroke-dashoffset: 7000;
+  }
+  45% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write34 {
+  0%,
+  45% {
+    stroke-dashoffset: 8000;
+  }
+  60% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write341 {
+  0%,
+  55% {
+    stroke-dashoffset: 1000;
+  }
+  60% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write35 {
+  0%,
+  60% {
+    stroke-dashoffset: 10000;
+  }
+  75% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes write36 {
+  0%,
+  75% {
+    stroke-dashoffset: 10000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes writeFill {
+  0% {
+    fill: rgba(255, 255, 255, 0);
+  }
+  100% {
+    fill: #ffffff;
   }
 }
 .services .sub-header {

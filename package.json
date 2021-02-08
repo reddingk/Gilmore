@@ -10,7 +10,7 @@
     "build": "npm run build-css && react-scripts build",
     "heroku-postbuild": "npm run build",
     "script-run": "react-scripts start",
-    "script-dev": "concurrently \"npm run watch-css\" \"npm run script-run\" \"wait-on http://localhost:3001\""
+    "script-dev": "concurrently \"npm run watch-css\" \"npm run script-run\""
   },
   "author": "Kris Redding",
   "license": "ISC",

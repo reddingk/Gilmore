@@ -10,12 +10,12 @@ import axios from 'axios';
 import back from '../../assets/imgs/exterior3.jpg';
 
 /* Components */
-import Signature from '../components/signature2';
+import Signature from '../components/signature3';
 
 var phraseInfo = null;
 var phraseInfo2 = [];
 var writerStatus = false;
-var rootPath = ( false ? "http://localhost:1245" : "");
+var rootPath = ( window.location.href.indexOf("localhost") > -1  ? "http://localhost:1245" : "");
 
 class Home extends Component{
     constructor(props) {
@@ -24,9 +24,13 @@ class Home extends Component{
             prePause:700,
             typePause:50,
             selectedIndex: 0,
-            selectedPhrase:[],
+            selectedPhrase:[
+                { text:"As a family owned business, it is our distinct privilege to be able to provide information and services to those we serve with understanding.", class:"base"},
+                { text:"Thank you kindly for your time,", class:"base line"}
+            ],
+            displayPhrase: false,
             signature:false,
-            introTitle:"",
+            introTitle:"Roy L. Gilmore Funeral Home Inc.",
             introPhrase:[
                 { text:"As a family owned business, it is our distinct privilege to be able to provide information and services to those we serve with understanding.", class:"base"},
                 { text:"Thank you kindly for your time,", class:"base line"}
@@ -141,7 +145,7 @@ class Home extends Component{
             return (
                 this.state.testimonialList.map((test, i) => ( 
                     <div className="testimonial-item" key={i}>
-                        <p className="test-info"><i class="fas fa-quote-left" />{test.info}<i class="fas fa-quote-right" /></p>
+                        <p className="test-info"><i className="fas fa-quote-left" />{test.info}<i className="fas fa-quote-right" /></p>
                         <p className="test-name">{test.name}</p>
                     </div>
                 ))
@@ -340,10 +344,18 @@ class Home extends Component{
             window.scrollTo(0, 0);
             this.pageLocation();
             this.getServiceList();
-            this.phraseWriter(this.state.introPhrase, function(){ 
+            /*this.phraseWriter(this.state.introPhrase, function(){ 
                 writerStatus = true;
                 self.setState({ signature: true });
-            });
+            });*/
+            //selectedPhrase
+            setTimeout(function(){ 
+                self.setState({ displayPhrase: true }, ()=>{ 
+                    setTimeout(function(){ 
+                        self.setState({ signature: true });
+                    }, 2500);
+                })
+            }, 1000);
         }
         catch(ex){
             console.log("Error with mount:", ex);
@@ -360,7 +372,7 @@ class Home extends Component{
                 <section className="landing-section">
                     <div className="text-cover">
                         <h1>{this.state.introTitle}</h1> 
-                        <div className="writer-phrase">
+                        <div className={"writer-phrase " +(this.state.displayPhrase ? "wshow" : "")}>
                             {this.state.selectedPhrase.map((item,i) =>
                                 <div className={"line-item "+item.class} key={i}><span>{item.text}</span></div>
                             )}
@@ -370,10 +382,10 @@ class Home extends Component{
                     <div className="img-cover"><img src={back} alt="Funeral Background"/></div>
                     
                     {/* Type Loader */}
-                    {!writerStatus && <div className="load-bar" onClick={this.stopWriter}>
+                    {/*!writerStatus && <div className="load-bar" onClick={this.stopWriter}>
                         <ProgressBar progress={100 * (this.state.phraseSz.current / this.state.phraseSz.final)} radius={100} strokeColor="rgb(99,36,35)" trackStrokeColor="rgb(255,255,255)"/>
                         <i className="fas fa-stop" />
-                    </div>}
+                            </div>*/}
 
                     {/* Service Time Tool */}
                     <div className="serviceTime-scroller lifted">
