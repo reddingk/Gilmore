@@ -47,7 +47,7 @@ class App extends Component{
         super(props);
         this.state = {
             sidebarOpen: false,
-            copyrightDate:"2020",
+            copyrightDate:"2021",
             pageLoc:""
         };
         this.setSidebarDisplay = this.setSidebarDisplay.bind(this);

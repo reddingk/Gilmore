@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ProgressBar from 'react-customizable-progressbar'
 
 import "react-alice-carousel/lib/alice-carousel.css";
 import AliceCarousel from 'react-alice-carousel';
@@ -7,13 +6,11 @@ import AliceCarousel from 'react-alice-carousel';
 import axios from 'axios';
 
 /* Images */
-import back from '../../assets/imgs/exterior3.jpg';
+import back from '../../assets/imgs/exterior11.jpg';
 
 /* Components */
 import Signature from '../components/signature3';
 
-var phraseInfo = null;
-var phraseInfo2 = [];
 var writerStatus = false;
 var rootPath = ( window.location.href.indexOf("localhost") > -1  ? "http://localhost:1245" : "");
 
@@ -72,9 +69,6 @@ class Home extends Component{
         this.buildEventItems = this.buildEventItems.bind(this);   
         this.buildTestimonialList = this.buildTestimonialList.bind(this);     
         this.parseDate = this.parseDate.bind(this);
-        this.phraseWriter = this.phraseWriter.bind(this);
-        this.typePhrase = this.typePhrase.bind(this);
-        this.stopWriter = this.stopWriter.bind(this);
         this.pageLocation = this.pageLocation.bind(this);
         this.formElement = this.formElement.bind(this);
         this.onElementChange = this.onElementChange.bind(this);
@@ -191,72 +185,6 @@ class Home extends Component{
         return ret;
     }
 
-    phraseWriter(phrase, callback){
-        var self = this;
-        try {
-            writerStatus = false;
-            /* Type Text */                        
-            self.setState({ introTitle:"Roy L. Gilmore Funeral Home Inc.", selectedPhrase: [] }, () => {
-                phraseInfo = setTimeout(function () {
-                    self.typePhrase(phrase, function(){
-                        setTimeout(function () {callback();}, self.state.readPause);
-                    });
-                }, self.state.prePause);
-            });   
-        }
-        catch(ex){
-            console.log("Error with phrasewriter: ",ex);
-        }
-    }
-
-    typePhrase(phrase, callback){
-        var self = this;
-        try {
-            let k = 0; 
-            let textSz = { current:0, final:0};
-            phrase.map(function(item){ textSz.final = textSz.final + item.text.length; return item; });
-            self.setState({ phraseSz: textSz });
-
-            for(var i=0; i < phrase.length; i++){
-                let i2 = i;
-                for(var j =0; j < phrase[i].text.length; j++){
-                    let j2 = j;
-                    phraseInfo2.push(setTimeout(function () {
-                        var tmpPhraseList = self.state.selectedPhrase;
-                        if(tmpPhraseList.length < i2+1 ){
-                            tmpPhraseList.push({text:"", class:phrase[i2].class});
-                        }
-                        tmpPhraseList[i2].text = tmpPhraseList[i2].text + phrase[i2].text[j2];
-                        
-                        textSz.current++;
-                        self.setState({ selectedPhrase: tmpPhraseList, phraseSz: textSz}, () =>{
-                            if((i2+1) >= phrase.length && (j2+1) >= phrase[i2].text.length) { callback(); }
-                        });
-                    }, self.state.typePause * (k+1)));
-                    k++;
-                }
-            }
-        }
-        catch(ex){
-            console.log("[ERROR] Typing Phrase: ",ex);
-        }
-    }
-
-    stopWriter(){
-        var self = this;
-        try {
-            clearTimeout(phraseInfo);
-            for(var i =0; i < phraseInfo2.length; i++){
-                clearTimeout(phraseInfo2[i]);
-            }
-
-            this.setState({ selectedPhrase: this.state.introPhrase }, () =>{ writerStatus = true; self.setState({ signature: true });});
-        }
-        catch(ex){
-            console.log(" [ERROR] Stopping Writer: ",ex);
-        }
-    }
-
     pageLocation(){
         var self = this;
         try {
@@ -344,11 +272,6 @@ class Home extends Component{
             window.scrollTo(0, 0);
             this.pageLocation();
             this.getServiceList();
-            /*this.phraseWriter(this.state.introPhrase, function(){ 
-                writerStatus = true;
-                self.setState({ signature: true });
-            });*/
-            //selectedPhrase
             setTimeout(function(){ 
                 self.setState({ displayPhrase: true }, ()=>{ 
                     setTimeout(function(){ 
@@ -379,13 +302,7 @@ class Home extends Component{
                         </div>
                         {(this.state.signature === true) && <Signature />}
                     </div>
-                    <div className="img-cover"><img src={back} alt="Funeral Background"/></div>
-                    
-                    {/* Type Loader */}
-                    {/*!writerStatus && <div className="load-bar" onClick={this.stopWriter}>
-                        <ProgressBar progress={100 * (this.state.phraseSz.current / this.state.phraseSz.final)} radius={100} strokeColor="rgb(99,36,35)" trackStrokeColor="rgb(255,255,255)"/>
-                        <i className="fas fa-stop" />
-                            </div>*/}
+                    <div className="img-cover"><img src={back} alt="Funeral Background"/></div>                  
 
                     {/* Service Time Tool */}
                     <div className="serviceTime-scroller lifted">
@@ -403,7 +320,7 @@ class Home extends Component{
                 
                 <section className="about background-pattern1" id="aboutus">
                     <div className="about-text">
-                        <h1>Family Owned & Operated, Since 1974</h1>
+                        <h1>Family Owned & Operated, Since 1955</h1>
                         <p>A tradition passed on from generation to generation, the Gilmore family has dedicated their lives to serving families in their time of need. The family approach of service is simple, "Serving families with excellence, fully dedicated to earning their trust and providing the highest level of understanding.</p>
                         <p>We strive to serve each family with the compassion, dignity, and the respect they deserve in their time of need. The "family-owned" personal touch of funeral service is prevalent in all we do. Serving all denominations and faiths; celebrations of life.</p>
                     </div>
