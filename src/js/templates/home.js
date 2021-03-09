@@ -285,9 +285,7 @@ class Home extends Component{
         }        
     }
     
-    componentWillUnmount() {
-        this.stopWriter();
-    }
+    componentWillUnmount() {}
     
     render(){  
         return(
