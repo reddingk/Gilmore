@@ -146,6 +146,8 @@
     
                 @media @mobile-nav { width: 100%; margin-left: 0;  }
             }
+
+            @media @mobile-nav { transform: translate(-55%, -50%); }
         }
         
         .serviceTime-scroller {
@@ -213,7 +215,7 @@
         .about-text {
             flex:1;
             padding: 20px 20px 20px 5%;
-            h1 { color: @color1;}
+            h1 { color: @color1; @media @mobile-nav { text-align: center;}}
             p { font-size: 1.4rem; @media @mobile-nav { font-size: 1.2rem;}}
         }
 
@@ -232,7 +234,7 @@
                     border-radius: 5px;
                     height: 330px;
                     padding: 3px;
-                    img { 
+                    img, iframe { 
                         width: 100%; 
                         min-height: 100%; 
                         object-fit: cover; 
@@ -305,6 +307,7 @@
                             }
 
                             &:hover { i { margin-right: 20px; }}
+                            &.special { color: @color4;}
                         }
                     }
                     .card-body {
@@ -313,7 +316,11 @@
                         .color3(background, 0.75);
                         border-radius: 7px; margin-bottom: 10px;
                         color: #000; font-size: 1.2rem;
+
+                        iframe { width: 100%; min-height: 250px;}
                     }
+
+                    &.special { border-bottom: 1px solid @color4; }
                 }
 
                 .no-data-container {
@@ -330,7 +337,7 @@
                 }
             }
 
-            @media @mobile-nav { margin-top: 20px; padding: 0 5%;}
+            @media @mobile-nav { margin: 20px 0; padding: 0 5%; width: 100%;}
         }
         .prep-text { 
             width: calc(50% - 30px);
@@ -344,12 +351,12 @@
             display: inline-flex;
             justify-content: center;
             flex-direction: column;
-            h1 { color: @color2;}
+            h1 { color: @color2; @media @mobile-nav { text-align: center;}}
 
             @media @mobile-nav { width: 100%; border-radius: 0; margin:0; padding: 10px 5%;}
         }
 
-        @media @mobile-nav { flex-direction: column-reverse; }
+        @media @mobile-nav { display: flex; flex-direction: column-reverse; }
     }
 
     .contactUs {
@@ -363,8 +370,7 @@
             flex:1;
             color: #fff;
             padding-right: 30px;
-            h1 { color: @color2; }
-            p { font-size: 1.8rem;}
+            h1 { color: @color2; @media @mobile-nav { text-align: center;}}
             .contact-lines { 
                 margin-top: 30px;
                 line-break: auto;
@@ -494,7 +500,7 @@
     .testimonials {
         padding: 100px 12%;
         text-align: center;
-        h1 { color: @color1; }
+        h1 { color: @color1; @media @mobile-nav { text-align: center;}}
         .alice-carousel {
             margin-top: 30px;
             .testimonial-item {

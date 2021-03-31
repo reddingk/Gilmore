@@ -40,10 +40,27 @@ function getPageData(req, res){
     }
 }
 
+function sendEmail(req, res){
+    try {
+        var name = req.body.name;
+        var email = req.body.email;
+        var phone = req.body.phone;
+        var message = req.body.message;
+
+        services.sendEmail(name, email, phone, message, function(ret){
+            res.status(200).json(ret);
+        });
+    }
+    catch(ex){
+        res.status(200).json({"errorMessage":"Error Sending Email: " + ex, "results":null });
+    }
+}
+
 /*** Routes ***/
 /* Site Routes */
 router.get('/getCopyrightDate', getCopyrightDate);
 router.post('/getServices', getServices);
 router.post('/getPageData', getPageData);
+router.post('/sendEmail', sendEmail);
 
 module.exports = router;

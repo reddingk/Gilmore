@@ -6,8 +6,17 @@ let Storyblok = new StoryblokClient({
     cache: { clear: 'auto', type: 'memory'}
   });
 
+const mSettings = { 
+    apikey: process.env.MAILGUN_API_KEY, 
+    domain: process.env.MAILGUN_DOMAIN,
+    user: process.env.MAILGUN_SMTP_LOGIN,
+    ccUser: process.env.MAIL_SERVER_USER
+};
+
+//const mailgun = require('mailgun-js')({ apiKey: mSettings.apikey, domain: mSettings.domain });
+
 var services = {
-    getPageData(url, callback){
+    getPageData: function(url, callback){
         var response = {"errorMessage":null, "results":null};
 
         try {
@@ -37,7 +46,7 @@ var services = {
             callback(response);
         }
     },
-    getServices:function(serviceQuery,callback){
+    getServices: function(serviceQuery,callback){
         try {
             var response = {"errorMessage":null, "results":{ list: null, pageCount: 1}};
 
@@ -93,7 +102,55 @@ var services = {
             console.log(response.errorMessage);
             callback(response);
         }
+    },
+    sendEmail: function(name, email, phone, message, callback){
+        try {
+            /*var d = Date.now();
+
+            var mailOptions = {
+                from: mSettings.user,
+                to: process.env.ADMIN_EMAIL,
+                subject: "Website User Email " + d.toISOString(),
+                html: buildEmailHtml(email, name, phone, message)
+            };
+
+            mailgun.messages().send(mailOptions, function (err, body) {
+                if (err) {
+                    console.log("[Error] Sending Email: ", err);
+                    response.errorMessage = err;
+                }
+                else {
+                    console.log("Email Sent");
+                    response.results = 'Email Sent';
+                }
+                callback(response);
+            });*/
+            console.log("Email Sent");
+            response.results = 'Email Sent';
+            callback(response);
+        }
+        catch(ex){
+            response.errorMessage = "[Error] Sending Email: "+ ex;
+            console.log(response.errorMessage);
+            callback(response);
+        }
     }
 }
 
 module.exports = services;
+
+function buildEmailHtml(email, name, phone, message){
+    var ret = "";
+    try {        
+        ret +=  util.format('<h1>User Email</h1>');
+        ret +=  util.format('<p>Email: %s</p>', email);
+        ret +=  util.format('<p>Name: %s</p>', name);
+        ret +=  util.format('<p>Phone: %s</p>', phone); 
+        ret +=  util.format('<br/><p>Message: %s</p>', message);      
+    }
+    catch(ex){
+        console.log("[Error] Error building email html: ",ex);        
+    }
+
+    return ret;
+}

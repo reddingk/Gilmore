@@ -273,6 +273,11 @@
     margin-left: 0;
   }
 }
+@media (max-width: 992px) {
+  .home .landing-section .text-cover {
+    transform: translate(-55%, -50%);
+  }
+}
 .home .landing-section .serviceTime-scroller {
   position: absolute;
   bottom: -10px;
@@ -350,6 +355,11 @@
 .home .about .about-text h1 {
   color: #632423;
 }
+@media (max-width: 992px) {
+  .home .about .about-text h1 {
+    text-align: center;
+  }
+}
 .home .about .about-text p {
   font-size: 1.4rem;
 }
@@ -374,7 +384,8 @@
   height: 330px;
   padding: 3px;
 }
-.home .about .about-img-container .alice-carousel .photo-item img {
+.home .about .about-img-container .alice-carousel .photo-item img,
+.home .about .about-img-container .alice-carousel .photo-item iframe {
   width: 100%;
   min-height: 100%;
   object-fit: cover;
@@ -459,6 +470,9 @@
 .home .preparing .prep-faq .accordion .card .card-header .btn-link:hover i {
   margin-right: 20px;
 }
+.home .preparing .prep-faq .accordion .card .card-header .btn-link.special {
+  color: #323232;
+}
 .home .preparing .prep-faq .accordion .card .card-body {
   padding: 15px 30px;
   background: #ebebeb;
@@ -467,6 +481,13 @@
   margin-bottom: 10px;
   color: #000;
   font-size: 1.2rem;
+}
+.home .preparing .prep-faq .accordion .card .card-body iframe {
+  width: 100%;
+  min-height: 250px;
+}
+.home .preparing .prep-faq .accordion .card.special {
+  border-bottom: 1px solid #323232;
 }
 .home .preparing .prep-faq .accordion .no-data-container {
   display: inline-flex;
@@ -483,8 +504,9 @@
 }
 @media (max-width: 992px) {
   .home .preparing .prep-faq {
-    margin-top: 20px;
+    margin: 20px 0;
     padding: 0 5%;
+    width: 100%;
   }
 }
 .home .preparing .prep-text {
@@ -504,6 +526,11 @@
   color: #f7d38b;
 }
 @media (max-width: 992px) {
+  .home .preparing .prep-text h1 {
+    text-align: center;
+  }
+}
+@media (max-width: 992px) {
   .home .preparing .prep-text {
     width: 100%;
     border-radius: 0;
@@ -513,6 +540,7 @@
 }
 @media (max-width: 992px) {
   .home .preparing {
+    display: flex;
     flex-direction: column-reverse;
   }
 }
@@ -532,8 +560,10 @@
 .home .contactUs .contact-info h1 {
   color: #f7d38b;
 }
-.home .contactUs .contact-info p {
-  font-size: 1.8rem;
+@media (max-width: 992px) {
+  .home .contactUs .contact-info h1 {
+    text-align: center;
+  }
 }
 .home .contactUs .contact-info .contact-lines {
   margin-top: 30px;
@@ -699,6 +729,11 @@
 }
 .home .testimonials h1 {
   color: #632423;
+}
+@media (max-width: 992px) {
+  .home .testimonials h1 {
+    text-align: center;
+  }
 }
 .home .testimonials .alice-carousel {
   margin-top: 30px;

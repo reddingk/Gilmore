@@ -34,16 +34,16 @@ class Home extends Component{
                 0: { items: 1 }, 600: { items: 2 }, 1024: { items: 2 }
             },
             responsivePhoto: {
-                0: { items: 2 }, 600: { items: 2 }, 1024: { items: 2 }
+                0: { items: 1 }, 600: { items: 2 }, 1024: { items: 2 }
             },
             serviceList:[], photoGallery:[],
             faqList:[], testimonialList:[],
             formData:{"name":"", "email":"", "phone":"","message":""},
             contactForm:[
-                {"type":"input-line","sz":10, "required":true, "name":"name", "placeholder":"Name"},
+                {"type":"input-line","sz":10, "required":true, "name":"name", "placeholder":"Name *"},
                 {"type":"input-line","sz":10, "required":true, "name":"email", "placeholder":"Email"},
-                {"type":"input-line","sz":10, "required":true, "name":"phone", "placeholder":"Phone"},
-                {"type":"textarea","sz":10, "required":false, "name":"message", "placeholder":"Message"}
+                {"type":"input-line","sz":10, "required":true, "name":"phone", "placeholder":"Phone *"},
+                {"type":"textarea","sz":10, "required":false, "name":"message", "placeholder":"Message *"}
             ]
         }
         
@@ -104,10 +104,15 @@ class Home extends Component{
     buildPhotoList(){
         try {
             if(this.state.photoGallery.length > 0) {
-                return(
+                return(                    
                     this.state.photoGallery.map((photo,i) => (
-                        <div className="photo-item" key={i}><img src={photo.image} alt={(photo.title ? photo.title : "Funeral Home "+i)}/></div>
-                    ))
+                        <div className="photo-item" key={i}>
+                            {photo.component === "Photo" ?
+                                <img src={photo.image} alt={(photo.title ? photo.title : "Funeral Home "+i)}/>
+                                : <iframe title="buzzfeed-video" src={photo.url}/>
+                            }
+                        </div>
+                    ))                    
                 )
             }
             else {
@@ -278,12 +283,33 @@ class Home extends Component{
         }
     }
 
-    submitForm(event){
+    submitForm(){
+        var self = this;
         try {
-           
+            if(self.state.formData.name.length <= 0 || self.state.formData.phone.length <= 0 || self.state.formData.message.length <= 0){
+                alert("Please Fill All Required Fields");
+            }
+            else {
+                var postData = { 
+                    name: self.state.formData.name, 
+                    email: self.state.formData.email, 
+                    phone: self.state.formData.phone, 
+                    message: self.state.formData.message
+                };
+
+                axios.post(rootPath + "/api/sendEmail", postData, {'Content-Type': 'application/json'})
+                    .then(function(response) {
+                        if(response.data.errorMessage){
+                            console.log(" [ERROR] Sending Email: ", response.data.errorMessage);
+                        }
+                        else if(response.data.results){
+                            
+                        }
+                    }); 
+            }
         }
         catch(ex){
-            console.log("[ERROR] submitting form: ",ex);
+            console.log(" [ERROR] Sending Email: ",ex);
         }
     }
 
@@ -335,9 +361,10 @@ class Home extends Component{
                 
                 <section className="about background-pattern1" id="aboutus">
                     <div className="about-text">
-                        <h1>Family Owned & Operated, Since 1955</h1>
+                        <h1>Family Owned & Operated, Since 1954</h1>
                         <p>A tradition passed on from generation to generation, the Gilmore family has dedicated their lives to serving families in their time of need. The family approach of service is simple, "Serving families with excellence, fully dedicated to earning their trust and providing the highest level of understanding.</p>
                         <p>We strive to serve each family with the compassion, dignity, and the respect they deserve in their time of need. The "family-owned" personal touch of funeral service is prevalent in all we do. Serving all denominations and faiths; celebrations of life.</p>
+                        <p>Featured video <a href="https://www.youtube.com/watch?v=bfju-IExuPA&t=1s" target="_blank" rel="noopener noreferrer">Undertakers Answer Googled Questions About Death</a></p>
                     </div>
                     <div className="about-img-container" id="writerPost">
                         <AliceCarousel className="photo-scroller" items={this.buildPhotoList()}
@@ -376,6 +403,20 @@ class Home extends Component{
                                     <div className="no-data"/><div className="no-data"/>                                    
                                 </div>
                             }
+
+                            {/* Special Video */}
+                            <div className="card special">
+                                <div className="card-header" id="heading-qa">
+                                    <h2 className="mb-0">
+                                        <button className="btn btn-link special" type="button" data-toggle="collapse" data-target="#collapse-qa" aria-expanded="false" aria-controls="collapse-qa">
+                                            <i className="fas fa-chevron-right" />Additional questions answered by our team
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapse-qa" className="collapse" aria-labelledby="heading-qa" data-parent="#faqAccordion">
+                                    <div className="card-body"><iframe title="buzzfeed-video" src="https://www.youtube.com/embed/bfju-IExuPA"/></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="prep-text">
