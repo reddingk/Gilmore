@@ -27,9 +27,23 @@ function getServices(req, res){
     }
 }
 
+function getPageData(req, res){ 
+    try {
+        var pageUrl = req.body.url;
+
+        services.getPageData(pageUrl, function(ret){
+            res.status(200).json(ret);
+        });
+    }
+    catch(ex){
+        res.status(200).json({"errorMessage":"Error Getting Page Date: " + ex, "results":null });
+    }
+}
+
 /*** Routes ***/
 /* Site Routes */
 router.get('/getCopyrightDate', getCopyrightDate);
 router.post('/getServices', getServices);
+router.post('/getPageData', getPageData);
 
 module.exports = router;

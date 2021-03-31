@@ -1,6 +1,42 @@
-//require('dotenv').config();
+require('dotenv').config();
+const StoryblokClient = require('storyblok-node-client');
+
+let Storyblok = new StoryblokClient({
+    privateToken: process.env.STORYBLOK_TOKEN,
+    cache: { clear: 'auto', type: 'memory'}
+  });
 
 var services = {
+    getPageData(url, callback){
+        var response = {"errorMessage":null, "results":null};
+
+        try {
+            // Clear Cache
+            Storyblok.flushCache();
+
+            // Get Data
+            Storyblok.get(url, { version: 'published' })
+                .then((ret) => {
+                    if(ret.statusCode != 200){
+                        response.errorMessage = "Unable to access Data"
+                    }
+                    else {
+                        response.results = ret.body.story.content;
+                    }
+                    callback(response);
+                })
+                .catch((error) => {
+                    response.errorMessage = error;
+                    console.log(error);
+                    callback(response);
+                });
+        }
+        catch(ex){
+            response.errorMessage = "[Error]: Getting Storyblok Page Data: "+ ex;
+            console.log(response.errorMessage);
+            callback(response);
+        }
+    },
     getServices:function(serviceQuery,callback){
         try {
             var response = {"errorMessage":null, "results":{ list: null, pageCount: 1}};

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink  } from "react-router-dom";
+//import { BrowserRouter as Router, Route, Link, NavLink  } from "react-router-dom";
+import { Router, Route, Link, NavLink  } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 /* Styles */

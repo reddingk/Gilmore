@@ -17,6 +17,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "bootstrap": "^4.3.1",
+    "dotenv": "^8.2.0",
     "express-http-to-https": "^1.1.4",
     "history": "^4.10.1",
     "jquery": "^3.4.1",
@@ -26,7 +27,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.0.1",
-    "react-scroll": "^1.8.1"
+    "react-scroll": "^1.8.1",
+    "storyblok-node-client": "^1.0.2"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",

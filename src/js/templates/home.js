@@ -8,9 +8,6 @@ import axios from 'axios';
 /* Images */
 import back from '../../assets/imgs/exterior11.jpg';
 
-/* Components */
-import Signature from '../components/signature3';
-
 var writerStatus = false;
 var rootPath = ( window.location.href.indexOf("localhost") > -1  ? "http://localhost:1245" : "");
 
@@ -39,21 +36,8 @@ class Home extends Component{
             responsivePhoto: {
                 0: { items: 2 }, 600: { items: 2 }, 1024: { items: 2 }
             },
-            serviceList:[],
-            faqList:[
-                { question:"Why do I have to use a funeral home?", answer:"You are not legally required to use a funeral home to plan and conduct a funeral. But because most of us do not have experience with the details and legal requirements involved, the services of a professional funeral home may be necessary and helpful." },
-                { question:"What happens when someone passes away out of town?", answer:"Funeral directors work together every day to coordinate the shipment of human remains between different cities, states and countries. If someone dies while travelling out-of-town, contact the funeral director in your home town. He or she can work with a local funeral director and the authorities where the death occurred to make arrangements to bring your loved one home. If the death occurs in a city where you or someone you trust is familiar with a local funeral home, you can also contact them for assistance." },
-                { question:"Do I need a funeral director?", answer:"In New York State, a licensed funeral director is required to make funeral arrangements and make the final disposition of the body. In addition to providing for the final disposition of human remains, the funeral director is a caregiver, listener and coordinator. As a caregiver, the funeral director helps the survivors make choices regarding the funeral and disposition. The funeral director is trained to listen and help survivors cope with their loss and when necessary, be able to make a referral to other professionals for additional help. An important function of the funeral director is to relieve the survivors of having to make arrangements for a religious or fraternal service, preparing a death notice, ordering flowers and arranging for a burial or cremation." },
-                { question:"Why have funeral ceremonies?", answer:"Funerals are age-old rituals that serve to honor the deceased. What has been found to be of equal importance is that the funeral also helps the survivors cope with the loss by playing an important part in the grief process. We all go through a psychological change with the loss of a loved one. The grief process, as the change is called, helps us live with the loss. The funeral helps us to initiate behaviors that might not be available to us without the funeral." }
-            ],
-            testimonialList:[
-                { info:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Wilson Family"},
-                { info:"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Jackson Family"},
-                { info:"Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Bridge Family"},
-                { info:"Aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Maximon Family"},
-                { info:"Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name:"Falls Family"},
-                { info:"Guis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,", name:"Acura Family"}
-            ],
+            serviceList:[], photoGallery:[],
+            faqList:[], testimonialList:[],
             formData:{"name":"", "email":"", "phone":"","message":""},
             contactForm:[
                 {"type":"input-line","sz":10, "required":true, "name":"name", "placeholder":"Name"},
@@ -64,6 +48,7 @@ class Home extends Component{
         }
         
         /* Functions */
+        this.getPageData = this.getPageData.bind(this);
         this.getServiceList = this.getServiceList.bind(this);
         this.buildPhotoList = this.buildPhotoList.bind(this);
         this.buildEventItems = this.buildEventItems.bind(this);   
@@ -75,6 +60,28 @@ class Home extends Component{
         this.submitForm = this.submitForm.bind(this);
     }  
     
+    getPageData(){
+        var self = this;
+        try {
+            var postData = { url:"stories/home" };
+            axios.post(rootPath + "/api/getPageData", postData, {'Content-Type': 'application/json'})
+                .then(function(response) {
+                    if(response.data.errorMessage){
+                        console.log(" [Error] Getting Home Page Data (E1): ", response.data.errorMessage);
+                    }
+                    else if(response.data.results){
+                        self.setState({ faqList: response.data.results.FAQ, 
+                            testimonialList: response.data.results.Testimonials,
+                            photoGallery: response.data.results.PhotoGallery
+                        })
+                    }
+                }); 
+        }
+        catch(ex){
+            console.log("Error getting home page data: ",ex);
+        }
+    }
+
     getServiceList(){
         var self = this;
         try {
@@ -96,14 +103,20 @@ class Home extends Component{
 
     buildPhotoList(){
         try {
-            var photoList = ["exterior1.jpg","interior1.JPG","interior2.JPG","interior3.JPG","interior4.JPG","interior5.JPG",
-                            "interior6.JPG","interior7.JPG","interior8.JPG","interior9.JPG", "exterior2.jpg", "exterior4.jpg",
-                            "exterior5.jpg", "exterior6.jpg","exterior7.jpg","exterior8.jpg"];
-            return(
-                photoList.map((photo,i) => (
-                    <div className="photo-item" key={i}><img src={"./images/"+photo} alt={"Funeral Home "+i}/></div>
-                ))
-            )
+            if(this.state.photoGallery.length > 0) {
+                return(
+                    this.state.photoGallery.map((photo,i) => (
+                        <div className="photo-item" key={i}><img src={photo.image} alt={(photo.title ? photo.title : "Funeral Home "+i)}/></div>
+                    ))
+                )
+            }
+            else {
+                return(
+                    [0,1,2,3,4].map((item,i) =>(
+                        <div className="photo-item empty" key={i}><div className="no-photo"/></div>
+                    ))
+                )
+            }
         }
         catch(ex){
             console.log("Error building photo list: ",ex);
@@ -136,14 +149,23 @@ class Home extends Component{
 
     buildTestimonialList(){
         try {
-            return (
-                this.state.testimonialList.map((test, i) => ( 
-                    <div className="testimonial-item" key={i}>
-                        <p className="test-info"><i className="fas fa-quote-left" />{test.info}<i className="fas fa-quote-right" /></p>
-                        <p className="test-name">{test.name}</p>
-                    </div>
-                ))
-            )            
+            if(this.state.testimonialList.length > 0) {
+                return (
+                    this.state.testimonialList.map((test, i) => ( 
+                        <div className="testimonial-item" key={i}>
+                            <p className="test-info"><i className="fas fa-quote-left" />{test.quote}<i className="fas fa-quote-right" /></p>
+                            <p className="test-name">{test.name}</p>
+                        </div>
+                    ))
+                )  
+            }     
+            else {
+                return (
+                    [0,1,2,3,4].map((test, i) => ( 
+                        <div className="testimonial-item" key={i}><div className="no-data"/></div>
+                    ))
+                )  
+            }     
         }
         catch(ex){
             console.log(" [Error] Building Event Items: ",ex);
@@ -196,8 +218,7 @@ class Home extends Component{
                     var writerLoc = writerPostEl.offsetTop + (writerPostEl.clientHeight*.4);
 
                     if(!writerStatus && writerPostEl && y >= (writerLoc - window.innerHeight) ){
-                        writerStatus = true;
-                        self.stopWriter();
+                        writerStatus = true;                        
                     }   
                     
                     /* Page Nav */
@@ -270,14 +291,11 @@ class Home extends Component{
         var self = this;
         try {
             window.scrollTo(0, 0);
+            this.getPageData();
             this.pageLocation();
             this.getServiceList();
             setTimeout(function(){ 
-                self.setState({ displayPhrase: true }, ()=>{ 
-                    setTimeout(function(){ 
-                        self.setState({ signature: true });
-                    }, 2500);
-                })
+                self.setState({ displayPhrase: true })
             }, 1000);
         }
         catch(ex){
@@ -298,7 +316,6 @@ class Home extends Component{
                                 <div className={"line-item "+item.class} key={i}><span>{item.text}</span></div>
                             )}
                         </div>
-                        {(this.state.signature === true) && <Signature />}
                     </div>
                     <div className="img-cover"><img src={back} alt="Funeral Background"/></div>                  
 
@@ -352,6 +369,13 @@ class Home extends Component{
                                     </div>
                                 </div>
                             )}
+
+                            {this.state.faqList.length <= 0 && 
+                                <div className="no-data-container">
+                                    <div className="no-data"/><div className="no-data"/>
+                                    <div className="no-data"/><div className="no-data"/>                                    
+                                </div>
+                            }
                         </div>
                     </div>
                     <div className="prep-text">

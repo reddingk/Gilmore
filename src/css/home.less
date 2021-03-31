@@ -1,3 +1,5 @@
+@emptyColor: rgba(220,220,220,1);
+
 .home {
     .landing-section {        
         height: calc(100vh - @navHeight + 4px);
@@ -239,7 +241,16 @@
                         -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
                         -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
                         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-                    }                                                 
+                    }   
+                    
+                    .no-photo {
+                        width: 100%; height: 100%;
+                        background: @emptyColor; border-radius: 2px;
+                        border: 7px solid #fff;
+                        -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+                        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+                    }
                 }
             }  
             
@@ -302,6 +313,19 @@
                         .color3(background, 0.75);
                         border-radius: 7px; margin-bottom: 10px;
                         color: #000; font-size: 1.2rem;
+                    }
+                }
+
+                .no-data-container {
+                    display: inline-flex;
+                    flex-direction: column;
+                    width: 100%;
+                    .no-data {
+                        display: block;
+                        width: 100%; height: 60px;
+                        background: rgba(245,245,245,0.7);
+                        border-bottom: 1px solid @color1;
+                        margin-bottom: 20px;
                     }
                 }
             }
@@ -487,6 +511,11 @@
                     }
                 }
                 .test-name { font-size: 1.4rem; font-weight: bold; color: @color1; }
+
+                .no-data {
+                    background: @emptyColor;
+                    height: 200px; width: 100%;
+                }
             }
 
             .alice-carousel__dots-item { 
