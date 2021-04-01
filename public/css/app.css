@@ -157,6 +157,11 @@
 .home .landing-section .text-cover .writer-phrase.wshow {
   height: 175px;
 }
+@media (max-width: 992px) {
+  .home .landing-section .text-cover .writer-phrase.wshow {
+    height: 255px;
+  }
+}
 .home .landing-section .text-cover #signature {
   width: 484px;
   height: 184px;
@@ -271,11 +276,6 @@
   .home .landing-section .text-cover #signature3 {
     width: 100%;
     margin-left: 0;
-  }
-}
-@media (max-width: 992px) {
-  .home .landing-section .text-cover {
-    transform: translate(-55%, -50%);
   }
 }
 .home .landing-section .serviceTime-scroller {
