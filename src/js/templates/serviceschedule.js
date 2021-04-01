@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ReactGA from 'react-ga';
+
 import LoadSpinner from '../components/loadSpinner';
 
 var rootPath = ( window.location.href.indexOf("localhost") > -1  ? "http://localhost:1245" : "");
@@ -20,6 +22,7 @@ class ServiceSchedule extends Component{
         this.parseDate = this.parseDate.bind(this);
         this.onElementChange = this.onElementChange.bind(this);
         this.pageChange = this.pageChange.bind(this);
+        this.initialReactGA = this.initialReactGA.bind(this);
     }  
 
     getServiceList(search, page){
@@ -109,12 +112,19 @@ class ServiceSchedule extends Component{
         }
     }
 
+    initialReactGA(){
+        //ReactGA.initialize('');
+        ReactGA.pageview('/serviceschedule');
+    }
+
     componentDidMount(){ 
         window.scrollTo(0, 0);
+        this.initialReactGA();
         this.getServiceList("", 1);
     }
 
     render(){  
+        document.title ="Roy L. Gilmore Funeral Home | Service Schedule"; 
         return(
             <div className="page-body services">
                 {this.state.loading && <LoadSpinner /> }

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 
 import "react-alice-carousel/lib/alice-carousel.css";
 import AliceCarousel from 'react-alice-carousel';
-import LoadSpinner from '../components/loadSpinner';
-
+import ReactGA from 'react-ga';
 import axios from 'axios';
+
+import LoadSpinner from '../components/loadSpinner';
 
 /* Images */
 import back from '../../assets/imgs/exterior11.jpg';
@@ -60,6 +61,7 @@ class Home extends Component{
         this.formElement = this.formElement.bind(this);
         this.onElementChange = this.onElementChange.bind(this);
         this.submitForm = this.submitForm.bind(this);
+        this.initialReactGA = this.initialReactGA.bind(this);
     }  
     
     getPageData(){
@@ -318,10 +320,16 @@ class Home extends Component{
         }
     }
 
+    initialReactGA(){
+        //ReactGA.initialize('');
+        ReactGA.pageview('/home');
+    }
+
     componentDidMount(){
         var self = this;
         try {
             window.scrollTo(0, 0);
+            this.initialReactGA();
             this.getPageData();
             this.pageLocation();
             this.getServiceList();
@@ -337,6 +345,7 @@ class Home extends Component{
     componentWillUnmount() {}
     
     render(){  
+        document.title ="Roy L. Gilmore Funeral Home";
         return(
             <div className="page-body home" id="scroll-page">
                 {this.state.loading && <LoadSpinner /> }
