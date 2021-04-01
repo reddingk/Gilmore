@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import LoadSpinner from '../components/loadSpinner';
 
-var rootPath = ( false ? "http://localhost:1245" : "");
+var rootPath = ( window.location.href.indexOf("localhost") > -1  ? "http://localhost:1245" : "");
 
 class ServiceSchedule extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
             search:"",
             pageCount:1,
             currentPg:1,
-            serviceList:[
-                { name:"Joe Smith", location:"Chapel A", date:"2020-11-20T17:00:00" },
-                { name:"Betty Wilson", location:"Chapel B", date:"2020-11-20T16:00:00" },
-                { name:"AJ Rodger", location:"Chapel C", date:"2020-11-22T14:00:00" },
-                { name:"Kathrine Jensah", location:"Chapel B", date:"2020-11-24T12:00:00" },
-                { name:"Thomas Hamilton", location:"Chapel D", date:"2020-11-25T16:30:00" }
-            ]
+            serviceList:[]
         }
         
         /* Functions */
@@ -29,16 +25,19 @@ class ServiceSchedule extends Component{
     getServiceList(search, page){
         var self = this;
         try {
-            var postData = { search:search, size:8, page:page };
-            axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
-                .then(function(response) {
-                    if(response.data.errorMessage){
-                        console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
-                    }
-                    else if(response.data.results.list && response.data.results.list.length >= 0){
-                        self.setState({ serviceList: response.data.results.list, pageCount: response.data.results.pageCount });
-                    }
-                }); 
+            this.setState({ loading: true }, ()=>{
+                var postData = { search:search, size:8, page:page };
+                axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
+                    .then(function(response) {
+                        if(response.data.errorMessage){
+                            console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
+                            self.setState({loading:false});
+                        }
+                        else if(response.data.results.list && response.data.results.list.length >= 0){
+                            self.setState({loading:false, serviceList: response.data.results.list, pageCount: response.data.results.pageCount });
+                        }
+                    }); 
+            });
         }
         catch(ex){
             console.log(" [Error] Getting Service List: ",ex);
@@ -118,6 +117,7 @@ class ServiceSchedule extends Component{
     render(){  
         return(
             <div className="page-body services">
+                {this.state.loading && <LoadSpinner /> }
                 <section className="sub-header">
                     <div className="header-container">
                         <div className="sub-content sub-title">
@@ -156,19 +156,24 @@ class ServiceSchedule extends Component{
                                     <td>{service.location}</td>
                                 </tr>
                             ))}
+                            {this.state.serviceList.length === 0 &&
+                                <tr className="empty-table"><td colSpan={4}>No Services Found</td></tr>
+                            }
                         </tbody>
                     </table>
+                        
+                    {this.state.serviceList.length > 0 &&
+                        <div className="table-control">
+                            <div className="scroll-ctrl">
+                                <div className={"ctrl-item left" + (this.state.currentPg === 1 ? " disabled":"")} onClick={() => this.pageChange("prev")}><i className="fas fa-chevron-left"/></div>
+                                <div className={"ctrl-item right" + (this.state.currentPg === this.state.pageCount ? " disabled":"")} onClick={() => this.pageChange("next")}><i className="fas fa-chevron-right"/></div>
+                            </div>
 
-                    <div className="table-control">
-                        <div className="scroll-ctrl">
-                            <div className={"ctrl-item left" + (this.state.currentPg === 1 ? " disabled":"")} onClick={() => this.pageChange("prev")}><i className="fas fa-chevron-left"/></div>
-                            <div className={"ctrl-item right" + (this.state.currentPg === this.state.pageCount ? " disabled":"")} onClick={() => this.pageChange("next")}><i className="fas fa-chevron-right"/></div>
+                            <div className="page-info">
+                                <div className="pg-info">Page {this.state.currentPg} of {this.state.pageCount}</div>                            
+                            </div>
                         </div>
-
-                        <div className="page-info">
-                            <div className="pg-info">Page {this.state.currentPg} of {this.state.pageCount}</div>                            
-                        </div>
-                    </div>
+                    }
                 </section>
             </div>
         );

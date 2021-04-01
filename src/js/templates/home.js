@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import "react-alice-carousel/lib/alice-carousel.css";
 import AliceCarousel from 'react-alice-carousel';
+import LoadSpinner from '../components/loadSpinner';
 
 import axios from 'axios';
 
@@ -15,6 +16,7 @@ class Home extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             prePause:700,
             typePause:50,
             selectedIndex: 0,
@@ -85,16 +87,19 @@ class Home extends Component{
     getServiceList(){
         var self = this;
         try {
-            var postData = { search:"", size:10, page:1 };
-            axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
-                .then(function(response) {
-                    if(response.data.errorMessage){
-                        console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
-                    }
-                    else if(response.data.results.list && response.data.results.list.length >= 0){
-                        self.setState({ serviceList: response.data.results.list });
-                    }
-                }); 
+            this.setState({ loading: true }, ()=>{
+                var postData = { search:"", size:10, page:1 };
+                axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
+                    .then(function(response) {
+                        if(response.data.errorMessage){
+                            console.log(" [Error] Getting Service List (E1): ", response.data.errorMessage);
+                            self.setState({ loading: false });
+                        }
+                        else if(response.data.results.list && response.data.results.list.length >= 0){
+                            self.setState({ loading: false, serviceList: response.data.results.list });
+                        }
+                    }); 
+            });
         }
         catch(ex){
             console.log(" [Error] Getting Service List: ",ex);
@@ -334,6 +339,7 @@ class Home extends Component{
     render(){  
         return(
             <div className="page-body home" id="scroll-page">
+                {this.state.loading && <LoadSpinner /> }
                 <section className="landing-section">
                     <div className="text-cover">
                         <h1>{this.state.introTitle}</h1> 
@@ -355,6 +361,10 @@ class Home extends Component{
                                     mouseTracking autoPlay infinite
                                     responsive={this.state.responsive} ref={ el => this.Carousel = el }/>
                             </div>
+                        }
+
+                        {this.state.serviceList.length === 0 && 
+                            <div className="no-data">Upcoming services coming soon</div>
                         }
                     </div>
                 </section>
