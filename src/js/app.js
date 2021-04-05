@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import { BrowserRouter as Router, Route, Link, NavLink  } from "react-router-dom";
-import { Router, Route, Link, NavLink  } from "react-router-dom";
+import { Router, Route, Link, NavLink, Redirect  } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 /* Styles */
@@ -9,15 +9,18 @@ import "../css/app.less";
 /* Components */
 import ServiceSchedule from './templates/serviceschedule';
 import Home from './templates/home';
+import Login from './templates/login';
+import Admin from './templates/admin';
 
 /* Images */
 import logo_c from '../assets/imgs/logo_c1.png';
 import logo_w from '../assets/imgs/logo_w.png';
 
+var mySessKey = "g1lM0re";
 const history = createBrowserHistory(); 
 
 const routes = [
-    { path:"/serviceschedule", component:ServiceSchedule}
+    { path:"/serviceschedule", component:ServiceSchedule }
 ];
 
 const SiteRoutes = route => (
@@ -53,6 +56,8 @@ class App extends Component{
         };
         this.setSidebarDisplay = this.setSidebarDisplay.bind(this);
         this.changePageLoc = this.changePageLoc.bind(this);
+        this.userHandler = this.userHandler.bind(this);
+        this.checkUser = this.checkUser.bind(this);
     }
 
     setSidebarDisplay(status) {
@@ -65,6 +70,38 @@ class App extends Component{
         this.setState({ pageLoc:page });
     }
 
+    userHandler(newToken, cb){
+        try {   
+            if(newToken){            
+                localStorage.setItem(mySessKey, newToken);
+                uAuth.authenticate(cb);
+            }
+            else {
+                localStorage.removeItem(mySessKey);
+                cb();
+            }              
+        }
+        catch(ex){
+            console.log("Error with user handler: ", ex);
+        }
+    }
+
+    checkUser(){
+        try {
+            var sessionInfo = localStorage.getItem(mySessKey);
+            if(sessionInfo){
+                var { isExpired } = parseToken(sessionInfo); 
+                
+                if(isExpired) {
+                    this.userHandler(null, function(){});
+                }
+            }
+        }
+        catch(ex){
+            console.log("Error Check Active User: ",ex);
+        }
+    }
+
     componentDidMount(){
         var self = this;
         try {
@@ -74,6 +111,7 @@ class App extends Component{
                     self.changePageLoc("");
                 }
             });
+            this.checkUser();
         }
         catch(ex){
             console.log("[Error] checking scroll loc: ", ex);
@@ -113,9 +151,12 @@ class App extends Component{
 
                     {/* Body */}                    
                     <Route exact path="/" render={props => ( <Home {...props} changePageLoc={this.changePageLoc}/>)} />
-                    {/*<Route exact path="/" component={Home} />*/}
                     { routes.map((route, i) => <SiteRoutes key={i} {...route} changePageLoc={this.changePageLoc} />) }
-                    
+
+                    {/* Admin Page */}
+                    <Route exact path="/login" render={props => ( <Login {...props} userHandler={this.userHandler} />)} />
+                    <PrivateRoute path="/admin"><Admin userHandler={this.userHandler} /></PrivateRoute>
+
                     {/* Footer */}
                     <div className="footer">
                         <div className="footer-section logo-section">
@@ -140,3 +181,59 @@ class App extends Component{
     }    
 }
 export default App;
+
+/* Private Route */
+
+const uAuth = {
+    isAuthenticated: false,
+    checkUser() {
+        //var ret = true;
+        var ret = false;
+        try {
+            var sessionInfo = localStorage.getItem(mySessKey);
+            if(sessionInfo){
+                var { localUser } = parseToken(sessionInfo);
+                ret = (localUser.userId ? true : false);
+            }
+        }
+        catch(ex){
+            console.log(" [Error] uAuth check: ",ex);
+        }
+        uAuth.isAuthenticated = ret;
+        return ret;
+    },
+    authenticate(cb) {
+        uAuth.isAuthenticated = true;
+        cb();
+    },
+    signout() {
+        uAuth.isAuthenticated = false;
+    }
+};
+
+function PrivateRoute({ children, ...rest }) {
+    var authChk = uAuth.checkUser();
+    return (
+      <Route {...rest} render={({ location }) =>
+            authChk ? (children) 
+            : ( <Redirect to={{ pathname: "/login", state: { from: location } }}/> )
+        }/>
+    );
+}
+
+function parseToken(token){
+    var localUser = null, isExpired = true; 
+    try {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        var jsStr = window.atob(base64);
+
+        localUser = JSON.parse(jsStr);
+        isExpired = (localUser && localUser.expDt < Date.now());
+    }
+    catch(ex){
+        console.log("[Error] parsing token: ",ex);
+    }
+
+    return { localUser, isExpired }
+}

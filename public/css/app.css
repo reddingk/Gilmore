@@ -1062,6 +1062,114 @@
     padding: 100px 5%;
   }
 }
+.login-container {
+  width: 80vw;
+  height: calc(75vh - 90px);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  -moz-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+}
+.login-container .login-form {
+  padding: 20px 5%;
+  background: rgba(225, 225, 225, 0.5);
+  display: flex;
+  flex-direction: column;
+  min-width: 45%;
+  font-size: 1.2rem;
+}
+.login-container .login-form .input-field {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+.login-container .login-form .input-field .input-title {
+  font-weight: bold;
+}
+.login-container .login-form .input-field .input-container {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #969696;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background: #ffffff;
+}
+.login-container .login-form .input-field .input-container i {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 7px;
+}
+.login-container .login-form .input-field .input-container input {
+  flex: 1;
+  border: 0;
+}
+.login-container .login-form .input-field .input-container.error {
+  border-color: #ff0000;
+}
+.login-container .login-form .sign-in-btn {
+  background: #f7d38b;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px 15px;
+  margin-top: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s all ease-in-out;
+  -webkit-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  -moz-box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+  box-shadow: 0 10px 6px -6px rgba(50, 50, 50, 0.5);
+}
+.login-container .login-form .sign-in-btn:hover {
+  opacity: 0.7;
+}
+.login-container .login-form .forgot-link {
+  color: #000;
+  margin-left: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s all ease-in-out;
+}
+.login-container .login-form .forgot-link:hover {
+  color: #f7d38b;
+}
+.login-container .img-container {
+  flex: 1;
+  background: #632423;
+  position: relative;
+}
+.login-container .img-container .img-text {
+  padding: 10px 5%;
+  color: #ffffff;
+  position: absolute;
+  top: 40%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.login-container .img-container .img-text span {
+  color: #f7d38b;
+}
+.login-container .img-container .img-text p {
+  font-size: 1.4rem;
+  margin-top: 20px;
+  line-height: 1.5rem;
+}
+.login-container .img-container .sign-in-logo {
+  width: 75%;
+  margin: auto;
+  opacity: 0.1;
+}
+.login-container .img-container .sign-in-logo img {
+  width: 100%;
+}
 body,
 html {
   margin: 0px !important;

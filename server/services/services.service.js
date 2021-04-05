@@ -6,18 +6,11 @@ let Storyblok = new StoryblokClient({
     cache: { clear: 'auto', type: 'memory'}
   });
 
-const mSettings = { 
-    apikey: process.env.MAILGUN_API_KEY, 
-    domain: process.env.MAILGUN_DOMAIN,
-    user: process.env.MAILGUN_SMTP_LOGIN,
-    ccUser: process.env.MAIL_SERVER_USER
-};
-
-//const mailgun = require('mailgun-js')({ apiKey: mSettings.apikey, domain: mSettings.domain });
+//const mailgun = require('mailgun-js')({ apiKey:process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 
 var services = {
     getPageData: function(url, callback){
-        var response = {"errorMessage":null, "results":null};
+        var response = {"error":null, "results":null};
 
         try {
             // Clear Cache
@@ -27,7 +20,7 @@ var services = {
             Storyblok.get(url, { version: 'published' })
                 .then((ret) => {
                     if(ret.statusCode != 200){
-                        response.errorMessage = "Unable to access Data"
+                        response.error = "Unable to access Data"
                     }
                     else {
                         response.results = ret.body.story.content;
@@ -35,20 +28,20 @@ var services = {
                     callback(response);
                 })
                 .catch((error) => {
-                    response.errorMessage = error;
+                    response.error = error;
                     console.log(error);
                     callback(response);
                 });
         }
         catch(ex){
-            response.errorMessage = "[Error]: Getting Storyblok Page Data: "+ ex;
-            console.log(response.errorMessage);
+            response.error = "[Error]: Getting Storyblok Page Data: "+ ex;
+            console.log(response.error);
             callback(response);
         }
     },
     getServices: function(serviceQuery,callback){
         try {
-            var response = {"errorMessage":null, "results":{ list: null, pageCount: 1}};
+            var response = {"error":null, "results":{ list: null, pageCount: 1}};
 
             /* { page, size, search } */
             var startVal = (serviceQuery.page - 1) * serviceQuery.size;
@@ -98,8 +91,8 @@ var services = {
             callback(response);
         }
         catch(ex){
-            response.errorMessage = "[Error]: Getting Services: "+ ex;
-            console.log(response.errorMessage);
+            response.error = "[Error]: Getting Services: "+ ex;
+            console.log(response.error);
             callback(response);
         }
     },
@@ -108,7 +101,7 @@ var services = {
             /*var d = Date.now();
 
             var mailOptions = {
-                from: mSettings.user,
+                from: process.env.MAILGUN_SMTP_LOGIN,
                 to: process.env.ADMIN_EMAIL,
                 subject: "Website User Email " + d.toISOString(),
                 html: buildEmailHtml(email, name, phone, message)
@@ -117,7 +110,7 @@ var services = {
             mailgun.messages().send(mailOptions, function (err, body) {
                 if (err) {
                     console.log("[Error] Sending Email: ", err);
-                    response.errorMessage = err;
+                    response.error = err;
                 }
                 else {
                     console.log("Email Sent");
@@ -130,8 +123,8 @@ var services = {
             callback(response);
         }
         catch(ex){
-            response.errorMessage = "[Error] Sending Email: "+ ex;
-            console.log(response.errorMessage);
+            response.error = "[Error] Sending Email: "+ ex;
+            console.log(response.error);
             callback(response);
         }
     }
