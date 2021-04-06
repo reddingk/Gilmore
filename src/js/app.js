@@ -155,7 +155,7 @@ class App extends Component{
 
                     {/* Admin Page */}
                     <Route exact path="/login" render={props => ( <Login {...props} userHandler={this.userHandler} mySessKey={mySessKey} />)} />
-                    <PrivateRoute path="/admin"><Admin userHandler={this.userHandler} /></PrivateRoute>
+                    <PrivateRoute path="/admin"><Admin userHandler={this.userHandler} mySessKey={mySessKey} /></PrivateRoute>
 
                     {/* Footer */}
                     <div className="footer">

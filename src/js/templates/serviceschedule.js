@@ -32,8 +32,8 @@ class ServiceSchedule extends Component{
                 var postData = { search:search, size:8, page:page };
                 axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
                     .then(function(response) {
-                        if(response.data.errorMessage){
-                            console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
+                        if(response.data.error){
+                            console.log(" [Error] Getting Service List(1): ", response.data.error);
                             self.setState({loading:false});
                         }
                         else if(response.data.results.list && response.data.results.list.length >= 0){
@@ -55,9 +55,9 @@ class ServiceSchedule extends Component{
             var date = new Date(stdate);
             switch(type){
                 case "time":
-                    ret = ((date.getHours() +1 > 12) ? (date.getHours()+1) -12 : (date.getHours()+1)) +":"
+                    ret = ((date.getHours() > 12) ? (date.getHours() - 12) : date.getHours()) +":"
                     + ((date.getMinutes() < 10) ? "0"+ date.getMinutes() : date.getMinutes())
-                    + ((date.getHours() +1 > 12) ? " PM" : " AM");
+                    + ((date.getHours() > 12) ? " PM" : " AM");
                     break;
                 case "date":
                     ret = Month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();

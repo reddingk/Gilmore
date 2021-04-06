@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import "react-datetime/css/react-datetime.css";
+import Datetime from "react-datetime";
+
 import LoadSpinner from '../components/loadSpinner';
 
 /* Images */
@@ -16,22 +19,42 @@ class Admin extends Component{
             locationList:["Chapel A","Chapel B","Chapel C","Chapel D" ],
             search:"", pageCount:1, currentPg:1,
             serviceList:[],
-            name:"", date:"", location:"", _id:null 
+            name:"", date:'', location:"", _id:null 
         }  
         
         this.handleChange = this.handleChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.parseDate = this.parseDate.bind(this);
         this.pageChange = this.pageChange.bind(this);
         this.getServiceList = this.getServiceList.bind(this);
         this.selectService = this.selectService.bind(this);
+        this.clearSelected = this.clearSelected.bind(this);
+        this.addUpdateService = this.addUpdateService.bind(this);
+        this.removeService = this.removeService.bind(this);
     }  
 
     handleChange(e){
+        var self = this;
         try {
             var name = e.target.name;
             var value = e.target.value;
             
-            this.setState({ [name]: value });
+            this.setState({ [name]: value },() => {
+                if(name === "search") {
+                    self.getServiceList(self.state.search, self.state.currentPg);
+                }
+            });
+        }
+        catch(ex){
+            console.log(" [Error] Handling Change: ",ex);
+        }
+    }
+
+    handleDateChange(e){
+        try {
+            var date = e._d;
+            
+            this.setState({ date: date });
         }
         catch(ex){
             console.log(" [Error] Handling Change: ",ex);
@@ -46,9 +69,9 @@ class Admin extends Component{
             var date = new Date(stdate);
             switch(type){
                 case "time":
-                    ret = ((date.getHours() +1 > 12) ? (date.getHours()+1) -12 : (date.getHours()+1)) +":"
+                    ret = ((date.getHours() > 12) ? (date.getHours() - 12) : date.getHours()) +":"
                     + ((date.getMinutes() < 10) ? "0"+ date.getMinutes() : date.getMinutes())
-                    + ((date.getHours() +1 > 12) ? " PM" : " AM");
+                    + ((date.getHours() > 12) ? " PM" : " AM");
                     break;
                 case "date":
                     ret = Month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
@@ -94,8 +117,8 @@ class Admin extends Component{
                 var postData = { search:search, size:8, page:page };
                 axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
                     .then(function(response) {
-                        if(response.data.errorMessage){
-                            console.log(" [Error] Getting Service List(1): ", response.data.errorMessage);
+                        if(response.data.error){
+                            console.log(" [Error] Getting Service List(1): ", response.data.error);
                             self.setState({loading:false});
                         }
                         else if(response.data.results.list && response.data.results.list.length >= 0){
@@ -117,7 +140,73 @@ class Admin extends Component{
             });
         }
         catch(ex){
-            console.log("[Erro] Selecting Service")
+            console.log("[Error] Selecting Service")
+        }
+    }
+
+    clearSelected(){
+        try {
+            this.setState({ name:"", date:'',  location:"", _id: null });
+        }
+        catch(ex){
+            console.log("[Error] Clear Selected")
+        }
+    }
+
+    addUpdateService(){
+        var self = this;
+        try {
+            this.setState({ loading: true }, ()=> {
+
+                var sessionInfo = localStorage.getItem(self.props.mySessKey);
+                var getHeaders = { 'Content-Type': 'application/json', 'Authorization': sessionInfo };
+                var postData = { _id: this.state._id, name: this.state.name, location: this.state.location, date: this.state.date };
+                
+                axios.post(rootPath + "/api/auth/updateService", postData, { headers: getHeaders })
+                    .then(function(response) {
+                        if(response.data.error || !response.data.results){
+                            console.log(" [Error] Updating Service: ", response.data.error);
+                            self.setState({loading:false});
+                        }
+                        else {
+                            self.setState({ loading:false, name:"", date:'',  location:"", _id: null }, ()=>{
+                                self.getServiceList(self.state.search, 1);
+                            });
+                        }
+                    }); 
+            });
+        }
+        catch(ex){
+            console.log("[Error] Clear Selected")
+        }
+    }
+
+    removeService(id){
+        var self = this;
+        try {
+            var firm = window.confirm("Do you want to remove this service?");
+
+            if(firm === true){ 
+                this.setState({ loading: true }, ()=> {
+                    var sessionInfo = localStorage.getItem(self.props.mySessKey);
+                    var getHeaders = { 'Content-Type': 'application/json', 'Authorization': sessionInfo };
+                    var postData = { id: id };
+                    
+                    axios.post(rootPath + "/api/auth/removeService", postData, { headers: getHeaders })
+                        .then(function(response) {
+                            if(response.data.error || !response.data.results){
+                                console.log(" [Error] Updating Service: ", response.data.error);
+                                self.setState({loading:false});
+                            }
+                            else {
+                                self.getServiceList(self.state.search, 1);                            
+                            }
+                        }); 
+                });
+            }
+        }
+        catch(ex){
+            console.log("[Error] Clear Selected")
         }
     }
 
@@ -136,7 +225,7 @@ class Admin extends Component{
 
                 <div className="add-btn-container">
                     <div className="icon-container">
-                        <div className="add-icon"><i className="fas fa-user-plus" /></div>
+                        <div className="add-icon"><i className={"fas " + (this.state._id ? "fa-edit" :"fa-user-plus")} /></div>
                     </div>
 
                     <div className="input-field sz-3">
@@ -151,7 +240,7 @@ class Admin extends Component{
                         <div className="input-title">Location</div>
                         <div className="input-container">
                             <i className="fas fa-map-pin"></i>
-                            <select value={this.state.location} onChange={this.handleChange}>
+                            <select name="location" value={this.state.location} onChange={this.handleChange}>
                                 <option value=""></option>
                                 {this.state.locationList.map((item,i) =>
                                     <option value={item} key={i}>{item}</option>
@@ -164,16 +253,25 @@ class Admin extends Component{
                         <div className="input-title">Date & Time</div>
                         <div className="input-container">
                             <i className="fas fa-calendar-alt"></i>
-                            <input type="datetime-local" name="date" value={this.state.date} autoComplete="off" onChange={this.handleChange}/>
+                            <Datetime value={this.state.date} onChange={this.handleDateChange} displayTimeZone={null}/>
                         </div>
                     </div>
 
                     <div className="input-field btn-container sz-2">
-                        <div className="lBtn lifted"><span>Add Service</span><i className="btn-icon fas fa-plus"></i></div>
+                        <div className="lBtn" onClick={this.clearSelected}><span>Clear</span><i className="btn-icon fas fa-ban"></i></div>
+                        <div className="lBtn" onClick={this.addUpdateService}><span>{this.state._id ? "Update" : "Add"}</span><i className="btn-icon fas fa-plus"></i></div>
                     </div>
                 </div>
 
                 <div className="service-list admin-list">
+                    <div className="list-header">
+                        <div className="search-container">
+                            <div className="search-field c-blk">
+                                <i className="fas fa-search" />
+                                <input type="text" name="search" placeholder="Search Name" onChange={this.handleChange}/>
+                            </div>
+                        </div>
+                    </div>
                     <table className="service-table">
                         <thead>
                             <tr>
@@ -194,7 +292,7 @@ class Admin extends Component{
                                     <td>
                                         <div className="mini-btn-container">
                                             <div className="view-btn edit" onClick={() => this.selectService(service)}><i className="fas fa-edit"/></div>
-                                            <div className="view-btn remove"><i className="fas fa-trash-alt" /></div>
+                                            <div className="view-btn remove" onClick={()=> this.removeService(service._id)}><i className="fas fa-trash-alt" /></div>
                                         </div>
                                     </td>
                                 </tr>

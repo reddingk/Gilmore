@@ -70,8 +70,8 @@ class Home extends Component{
             var postData = { url:"stories/home" };
             axios.post(rootPath + "/api/getPageData", postData, {'Content-Type': 'application/json'})
                 .then(function(response) {
-                    if(response.data.errorMessage){
-                        console.log(" [Error] Getting Home Page Data (E1): ", response.data.errorMessage);
+                    if(response.data.error){
+                        console.log(" [Error] Getting Home Page Data (E1): ", response.data.error);
                     }
                     else if(response.data.results){
                         self.setState({ faqList: response.data.results.FAQ, 
@@ -93,8 +93,8 @@ class Home extends Component{
                 var postData = { search:"", size:10, page:1 };
                 axios.post(rootPath + "/api/getServices", postData, {'Content-Type': 'application/json'})
                     .then(function(response) {
-                        if(response.data.errorMessage){
-                            console.log(" [Error] Getting Service List (E1): ", response.data.errorMessage);
+                        if(response.data.error){
+                            console.log(" [Error] Getting Service List (E1): ", response.data.error);
                             self.setState({ loading: false });
                         }
                         else if(response.data.results.list && response.data.results.list.length >= 0){
@@ -306,8 +306,8 @@ class Home extends Component{
 
                 axios.post(rootPath + "/api/sendEmail", postData, {'Content-Type': 'application/json'})
                     .then(function(response) {
-                        if(response.data.errorMessage){
-                            console.log(" [ERROR] Sending Email: ", response.data.errorMessage);
+                        if(response.data.error){
+                            console.log(" [ERROR] Sending Email: ", response.data.error);
                         }
                         else if(response.data.results){
                             

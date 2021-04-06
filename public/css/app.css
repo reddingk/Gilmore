@@ -1001,6 +1001,12 @@
   border: none;
   outline: none;
 }
+.service-list .list-header .search-field.c-blk {
+  border-bottom-color: #000;
+}
+.service-list .list-header .search-field.c-blk i {
+  color: #000;
+}
 @media (max-width: 992px) {
   .service-list .list-header {
     flex-direction: column;
@@ -1253,6 +1259,13 @@
 .admin .add-btn-container .input-field .input-container select[type=datetime-local] {
   width: calc(100% - 20px);
 }
+.admin .add-btn-container .input-field .input-container .rdt {
+  width: 100%;
+}
+.admin .add-btn-container .input-field .input-container .form-control {
+  height: inherit;
+  padding: 0;
+}
 .admin .add-btn-container .input-field .input-container.error {
   border-color: #ff0000;
 }
@@ -1293,6 +1306,9 @@
   justify-content: flex-end;
   flex-direction: row;
 }
+.admin .add-btn-container .input-field.btn-container .lBtn + .lBtn {
+  margin-left: 7px;
+}
 .admin .add-btn-container .input-field.sz-1 {
   width: calc(10% - 10px);
 }
@@ -1325,6 +1341,19 @@
 }
 .admin .admin-list {
   padding: 0;
+}
+.admin .admin-list .list-header {
+  margin: 20px 0 0;
+  background: rgba(247, 211, 139, 0.5) !important;
+  padding: 10px;
+  border-radius: 5px;
+}
+.admin .admin-list .list-header .search-container {
+  width: 100%;
+}
+.admin .admin-list .list-header .search-container input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0);
 }
 .admin .admin-list tr.sel {
   background: #f7d38b !important;

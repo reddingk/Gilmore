@@ -234,7 +234,7 @@ var services = {
                                 response.error = updateError;
                             }
                             else if(retObj.matchedCount > 0){
-                                response.results = tmpID;                                                                  
+                                response.results = id;                                                                  
                             }
     
                             client.close();                            

@@ -8,10 +8,10 @@ var auth = require('../services/auth.service');
 function getCopyrightDate(req, res){
     try {
         var d = new Date();
-        res.status(200).json({"errorMessage":null, "results":d.getFullYear() });
+        res.status(200).json({"error":null, "results":d.getFullYear() });
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Processing Request: " + ex, "results":null });
+        res.status(200).json({"error":"Error Processing Request: " + ex, "results":null });
     }
 }
 
@@ -24,7 +24,7 @@ function getServices(req, res){
         });
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Processing Request: " + ex, "results":null });
+        res.status(200).json({"error":"Error Processing Request: " + ex, "results":null });
     }
 }
 
@@ -38,11 +38,11 @@ function getPageData(req, res){
             });
         }
         else {
-            res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+            res.status(200).json({"error":"Invalid Params", "results":null });
         }
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Getting Page Date: " + ex, "results":null });
+        res.status(200).json({"error":"Error Getting Page Date: " + ex, "results":null });
     }
 }
 
@@ -59,11 +59,11 @@ function sendEmail(req, res){
             });
         }
         else {
-            res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+            res.status(200).json({"error":"Invalid Params", "results":null });
         }
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Sending Email: " + ex, "results":null });
+        res.status(200).json({"error":"Error Sending Email: " + ex, "results":null });
     }
 }
 
@@ -75,11 +75,11 @@ function userLogin(req, res){
             });
         }
         else {
-            res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+            res.status(200).json({"error":"Invalid Params", "results":null });
         }
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error With User Login: " + ex, "results":null });
+        res.status(200).json({"error":"Error With User Login: " + ex, "results":null });
     }
 }
 
@@ -91,11 +91,11 @@ function forgotPwd(req, res){
             });
         }
         else {
-            res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+            res.status(200).json({"error":"Invalid Params", "results":null });
         }
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error With Forgot Password: " + ex, "results":null });
+        res.status(200).json({"error":"Error With Forgot Password: " + ex, "results":null });
     }
 }
 
@@ -107,11 +107,11 @@ function resetPwd(req, res){
             });
         }
         else {
-            res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+            res.status(200).json({"error":"Invalid Params", "results":null });
         }
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error With Password Reset: " + ex, "results":null });
+        res.status(200).json({"error":"Error With Password Reset: " + ex, "results":null });
     }
 }
 
@@ -121,26 +121,25 @@ function updateService(req, res){
             auth.authenticateJWTUser(req.headers.authorization, function(authRet){
                 if(authRet.status == true){
                     if(req.body && auth.paramCheck(["name", "location", "date"], req.body)){
-                        auth.updateService(req.body.id, req.body.name, req.body.location, req.body.date, function(ret){
+                        auth.updateService(req.body._id, req.body.name, req.body.location, req.body.date, function(ret){
                             res.status(200).json(ret);
                         });
                     }
                     else {
-                        res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+                        res.status(200).json({"error":"Invalid Params", "results":null });
                     }
                 }
                 else {
-                    res.status(200).json({"errorMessage":"User Not Authenticated", "results":null });
+                    res.status(200).json({"error":"User Not Authenticated", "results":null });
                 }
             });            
         }
         else {
-            ret.error = "Invalid Header Params";
-            res.status(200).json(ret);
+            res.status(200).json({"error":"Invalid Header Params", "results":null });
         }  
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Updating Service: " + ex, "results":null });
+        res.status(200).json({"error":"Error Updating Service: " + ex, "results":null });
     }
 }
 
@@ -155,11 +154,11 @@ function removeService(req, res){
                         });
                     }
                     else {
-                        res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+                        res.status(200).json({"error":"Invalid Params", "results":null });
                     }
                 }
                 else {
-                    res.status(200).json({"errorMessage":"User Not Authenticated", "results":null });
+                    res.status(200).json({"error":"User Not Authenticated", "results":null });
                 }
             });            
         }
@@ -169,7 +168,7 @@ function removeService(req, res){
         }  
     }
     catch(ex){
-        res.status(200).json({"errorMessage":"Error Removing Service: " + ex, "results":null });
+        res.status(200).json({"error":"Error Removing Service: " + ex, "results":null });
     }
 }
 
