@@ -148,7 +148,7 @@ class ServiceSchedule extends Component{
                             </div>
                         </div>
                     </div>
-                    <table className="service-table">
+                    <table className="service-table hover-row">
                         <thead>
                             <tr>
                                 <th>Name</th>

@@ -70,7 +70,7 @@ function sendEmail(req, res){
 function userLogin(req, res){
     try {
         if(req.body && auth.paramCheck(["email", "password"], req.body)){
-            auth.userLogin(req.body.email, req.body.pwd, function(ret){
+            auth.userLogin(req.body.email, req.body.password, function(ret){
                 res.status(200).json(ret);
             });
         }
@@ -115,6 +115,64 @@ function resetPwd(req, res){
     }
 }
 
+function updateService(req, res){
+    try {
+        if(req.headers && auth.paramCheck(["authorization"], req.headers)) {
+            auth.authenticateJWTUser(req.headers.authorization, function(authRet){
+                if(authRet.status == true){
+                    if(req.body && auth.paramCheck(["name", "location", "date"], req.body)){
+                        auth.updateService(req.body.id, req.body.name, req.body.location, req.body.date, function(ret){
+                            res.status(200).json(ret);
+                        });
+                    }
+                    else {
+                        res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+                    }
+                }
+                else {
+                    res.status(200).json({"errorMessage":"User Not Authenticated", "results":null });
+                }
+            });            
+        }
+        else {
+            ret.error = "Invalid Header Params";
+            res.status(200).json(ret);
+        }  
+    }
+    catch(ex){
+        res.status(200).json({"errorMessage":"Error Updating Service: " + ex, "results":null });
+    }
+}
+
+function removeService(req, res){
+    try {
+        if(req.headers && auth.paramCheck(["authorization"], req.headers)) {
+            auth.authenticateJWTUser(req.headers.authorization, function(authRet){
+                if(authRet.status == true){
+                    if(req.body && auth.paramCheck(["id"], req.body)){
+                        auth.removeService(req.body.id, function(ret){
+                            res.status(200).json(ret);
+                        });
+                    }
+                    else {
+                        res.status(200).json({"errorMessage":"Invalid Params", "results":null });
+                    }
+                }
+                else {
+                    res.status(200).json({"errorMessage":"User Not Authenticated", "results":null });
+                }
+            });            
+        }
+        else {
+            ret.error = "Invalid Header Params";
+            res.status(200).json(ret);
+        }  
+    }
+    catch(ex){
+        res.status(200).json({"errorMessage":"Error Removing Service: " + ex, "results":null });
+    }
+}
+
 /*** Routes ***/
 /* Site Routes */
 router.get('/getCopyrightDate', getCopyrightDate);
@@ -123,8 +181,11 @@ router.post('/getPageData', getPageData);
 router.post('/sendEmail', sendEmail);
 
 /* Admin Routes */
-router.post('/login', userLogin);
-router.post('/forgotPassword', forgotPwd);
-router.post('/resetPassword', resetPwd);
+router.post('/auth/login', userLogin);
+router.post('/auth/forgotPassword', forgotPwd);
+router.post('/auth/resetPassword', resetPwd);
+
+router.post('/auth/updateService', updateService);
+router.post('/auth/removeService', removeService);
 
 module.exports = router;

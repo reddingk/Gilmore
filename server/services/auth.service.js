@@ -2,11 +2,16 @@ require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const util = require('util');
 var randomstring = require("randomstring");
 var mongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 
-//const mailgun = require('mailgun-js')({ apiKey:process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+const mailgun = require('mailgun-js')({ apiKey:process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+const database = {
+    connectionString: process.env.DatabaseConnectionString,
+    dbName: process.env.DatabaseName, mongoOptions:{ useUnifiedTopology: true }
+}
 
 var services = {
     paramCheck(params, obj) {
@@ -30,6 +35,29 @@ var services = {
             ret = false;
         }
         return ret;
+    },
+    authenticateJWTUser: function(token, callback){
+        try {
+            var decoded = jwt.verify(token, process.env.GILMORE_SECRET);
+            if(!decoded) {
+                callback({ status: false, error: "Invalid Token" });
+            }
+            else {
+                _getUserByEmail(decoded.email, function(res){
+                    if(res.error){
+                        res.status = false; callback(res);
+                    }
+                    else {
+                        callback({ status: (decoded._id == res.results._id), results: decoded });                    
+                    }
+                }); 
+            }
+        }
+        catch(ex){
+            var err = util.format("Error Authenticating JWT Token On: %s", ex);
+            log.error(err);
+            callback({ "error":err});
+        }
     },
     userLogin: function(email, pwd, callback){
         var response = {"error":null, "results":null};
@@ -58,10 +86,11 @@ var services = {
                                     }
                                     else {
                                         delete res.results.pwd;
+                                        delete res.results.tmpPwd;
 
                                         // Set Expiration Date
                                         res.results.expDt = new Date();
-                                        res.results.expDt.setDate(res.results.expDt.getDate() + process.env.PWD_EXPIRATION);                            
+                                        res.results.expDt.setDate(res.results.expDt.getDate() + parseInt(process.env.PWD_EXPIRATION));                            
                                         res.results.expDt = res.results.expDt.getTime();
                                         
                                         var token = jwt.sign(res.results, process.env.GILMORE_SECRET);
@@ -136,6 +165,7 @@ var services = {
                                     else {
                                         client.close();
                                         // Email Temp Password to User
+                                        console.log("[T0] ", res.results.email, " | P: ", tmpPwd);
                                         _sendTempEmail(res.results.email, tmpPwd, callback);
                                     } 
                                 });          
@@ -181,6 +211,87 @@ var services = {
             console.log(response.error);
             callback(response);
         }
+    },
+    updateService(id, name, location, date, callback){
+        var response = {"error":null, "results":null};
+
+        try {
+            mongoClient.connect(database.connectionString, database.mongoOptions, function(err, client){
+                if(err) {
+                    response.error = err;
+                    if(client) { client.close(); }
+                    callback(response);
+                }
+                else {   
+                    // Convert date to time
+                    date = (new Date(date)).getTime(); 
+
+                    const db = client.db(database.dbName).collection('services');
+                    if(id){
+                        // Update
+                        db.updateOne({ "_id": ObjectId(id) }, { $set: { name: name, location:location, date: date } }, function(updateError,retObj){
+                            if(updateError){
+                                response.error = updateError;
+                            }
+                            else if(retObj.matchedCount > 0){
+                                response.results = tmpID;                                                                  
+                            }
+    
+                            client.close();                            
+                            callback(response);
+                        });
+                    }
+                    else {
+                        db.insertOne({ name: name, location:location, date: date }, function(insertError,retObj){
+                            if(insertError){
+                                response.error = insertError;
+                            }
+                            else {
+                                response.results = (retObj.ops.length > 0 ? retObj.ops[0]._id : null);                         
+                            }
+                            client.close();                            
+                            callback(response);
+                        });
+                    }
+                }
+            });
+        }
+        catch(ex){
+            response.error = "[Error] Adding/Updating Service "+ ex;
+            console.log(response.error);
+            callback(response);
+        }
+    },
+    removeService(id, callback){
+        var response = {"error":null, "results":null};
+
+        try {
+            mongoClient.connect(database.connectionString, database.mongoOptions, function(err, client){
+                if(err) {
+                    response.error = err;
+                    if(client) { client.close(); }
+                    callback(response);
+                }
+                else {   
+                    const db = client.db(database.dbName).collection('services');
+                    db.deleteOne({ "_id": ObjectId(id) }, function(updateError, retObj){
+                        if(updateError){
+                            response.error = updateError;
+                        }
+                        else {
+                            response.results = true;
+                        }                        
+                        client.close();
+                        callback(response);
+                    });
+                }
+            });
+        }
+        catch(ex){
+            response.error = "[Error] Removing Service "+ ex;
+            console.log(response.error);
+            callback(response);
+        }
     }
 }
 
@@ -202,7 +313,7 @@ function _comparePwd(inputPwd, serverPwd, callback){
     }
     catch(ex){
         response.error = "Error Comparing Passwords :" + ex;
-        log.error(response.error);
+        console.log(response.error);
         callback(response);
     }
 }
@@ -211,37 +322,34 @@ function _comparePwd(inputPwd, serverPwd, callback){
 function _sendTempEmail(email, tmpPwd, callback){
     var response = { "error":null, "results":false };
     try {
-        /*var d = Date.now(), res ="";
-            ret +=  util.format('<h1>Reset Password</h1>');
-            ret +=  util.format('<p>Your email address requested to have your password reset, if you received this in error please disregard this email.</p>');
-            ret +=  util.format('<p>If this is a valid request please click the link below and complete the password reset.</p>', name);
-            ret +=  util.format('<a href="http://localhost:3000/login?resetCode=%s" target="_blank">Reset Link</a>', tmpPwd);             
+        var d = Date.now(), ret ="";
+        ret +=  util.format('<h1>Reset Password</h1>');
+        ret +=  util.format('<p>Your email address requested to have your password reset, if you received this in error please disregard this email.</p>');
+        ret +=  util.format('<p>If this is a valid request please click the link below and complete the password reset.</p>');
+        ret +=  util.format('<a href="http://localhost:3000/login?resetCode=%s" target="_blank">Reset Link</a>', tmpPwd);             
 
-            var mailOptions = {
-                from: process.env.MAILGUN_SMTP_LOGIN,
-                to: email,
-                subject: "Gilmore Website Password Reset",
-                html: buildEmailHtml(email, name, phone, message)
-            };
+        var mailOptions = {
+            from: process.env.MAILGUN_SMTP_LOGIN,
+            to: email,
+            subject: "Gilmore Website Password Reset",
+            html: ret
+        };
 
-            mailgun.messages().send(mailOptions, function (err, body) {
-                if (err) {
-                    console.log("[Error] Sending Email: ", err);
-                    response.error = err;
-                }
-                else {
-                    console.log("Email Sent");
-                    response.results = 'Email Sent';
-                }
-                callback(response);
-            });*/
-            console.log("Reset Email Sent");
-            response.results = 'Reset Email Sent';
+        mailgun.messages().send(mailOptions, function (err, body) {
+            if (err) {
+                console.log("[Error] Sending Temporary Email: ", err);
+                response.error = err;
+            }
+            else {
+                console.log("Temporary Email Sent");
+                response.results = 'Temporary Email Sent';
+            }
             callback(response);
+        });
     }
     catch(ex){
-        response.error = "Error Sending Temp Email " + email +" :" + ex;
-        log.error(response.error);
+        response.error = "Error Sending Temporary Email " + email +" :" + ex;
+        console.log(response.error);
         callback(response);
     }
 }
@@ -255,7 +363,7 @@ function _getUserByEmail(email, callback){
                 if(err) {
                     response.error = err;
                     if(client) { client.close(); }
-                    log.error("Getting User By Email: " + err);
+                    console.log("Getting User By Email: " + err);
                     callback(response);
                 }
                 else {
@@ -277,7 +385,7 @@ function _getUserByEmail(email, callback){
     }
     catch(ex){
         response.error = "Error Getting User " + email +" :" + ex;
-        log.error(response.error);
+        console.log(response.error);
         callback(response);
     }
 }
@@ -297,7 +405,7 @@ function _pwdReset(id, pwd, callback){
                 var pwdHash = bcrypt.hashSync(pwd, parseInt(process.env.SALT_ROUNDS));
 
                 const db = client.db(database.dbName).collection('users');
-                db.updateOne({ "_id": ObjectId(id) }, { $set: { pwd: pwdHash } },
+                db.updateOne({ "_id": ObjectId(id) }, { $set: { pwd: pwdHash, tmpPwd:"" } },
                     function(updateError,retObj){
                         if(updateError){
                             response.error = updateError;
@@ -314,7 +422,7 @@ function _pwdReset(id, pwd, callback){
     }
     catch(ex){
         response.error = util.format("Error Adding User [%s] : %s", userInfo.userId , ex);
-        log.error(response.error);
+        console.log(response.error);
         callback(response);
     }
 }

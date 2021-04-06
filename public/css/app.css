@@ -968,28 +968,28 @@
     border-bottom-right-radius: 50px;
   }
 }
-.services .service-list {
+.service-list {
   min-height: 100vh;
   padding: 100px 7%;
 }
-.services .service-list .list-header {
+.service-list .list-header {
   margin: 20px 0 40px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.services .service-list .list-header .search-container {
+.service-list .list-header .search-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   width: 250px;
 }
-.services .service-list .list-header .search-field {
+.service-list .list-header .search-field {
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #969696;
 }
-.services .service-list .list-header .search-field i {
+.service-list .list-header .search-field i {
   color: #969696;
   margin-right: 7px;
   padding: 5px 0;
@@ -997,74 +997,74 @@
   flex-direction: column;
   justify-content: flex-end;
 }
-.services .service-list .list-header .search-field input {
+.service-list .list-header .search-field input {
   border: none;
   outline: none;
 }
 @media (max-width: 992px) {
-  .services .service-list .list-header {
+  .service-list .list-header {
     flex-direction: column;
   }
 }
-.services .service-list .service-table {
+.service-list .service-table {
   width: 100%;
   text-align: left;
   font-size: 1.3rem;
 }
-.services .service-list .service-table th,
-.services .service-list .service-table td {
+.service-list .service-table th,
+.service-list .service-table td {
   padding: 15px;
   transition: 0.5s all ease-in-out;
 }
-.services .service-list .service-table thead {
+.service-list .service-table thead {
   font-size: 1.5rem;
   font-weight: bold;
   border-bottom: 4px solid #632423;
 }
 @media (max-width: 992px) {
-  .services .service-list .service-table thead {
+  .service-list .service-table thead {
     font-size: 1.1rem;
   }
 }
-.services .service-list .service-table tbody tr:nth-child(even) {
+.service-list .service-table tbody tr:nth-child(even) {
   background: rgba(100, 100, 100, 0.2);
 }
-.services .service-list .service-table tbody tr + tr {
+.service-list .service-table tbody tr + tr {
   border-top: 1px solid #000;
 }
-.services .service-list .service-table tbody tr:hover td {
-  padding-left: 25px;
-  padding-right: 5px;
-}
-.services .service-list .service-table tbody .empty-table td {
+.service-list .service-table tbody .empty-table td {
   text-align: center;
   background: rgba(99, 36, 35, 0.2) !important;
 }
+.service-list .service-table.hover-row tr:hover td {
+  padding-left: 25px;
+  padding-right: 5px;
+}
 @media (max-width: 992px) {
-  .services .service-list .service-table {
+  .service-list .service-table {
     font-size: 1rem;
   }
 }
-.services .service-list .table-control {
+.service-list .table-control {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 15px 0;
 }
-.services .service-list .table-control .page-info {
+.service-list .table-control .page-info {
   font-size: 1.3rem;
   color: #632423;
   margin-right: 7px;
   font-weight: bold;
 }
 @media (max-width: 992px) {
-  .services .service-list {
+  .service-list {
     padding: 100px 5%;
   }
 }
 .login-container {
   width: 80vw;
-  height: calc(75vh - 90px);
+  min-height: calc(75vh - 90px);
   border-radius: 5px;
   display: flex;
   flex-direction: row;
@@ -1100,6 +1100,7 @@
   border-radius: 5px;
   padding: 5px 10px;
   background: #ffffff;
+  position: relative;
 }
 .login-container .login-form .input-field .input-container i {
   display: flex;
@@ -1113,6 +1114,16 @@
 }
 .login-container .login-form .input-field .input-container.error {
   border-color: #ff0000;
+}
+.login-container .login-form .input-field .input-container.uneditable::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  background: rgba(50, 50, 50, 0.3);
 }
 .login-container .login-form .sign-in-btn {
   background: #f7d38b;
@@ -1169,6 +1180,181 @@
 }
 .login-container .img-container .sign-in-logo img {
   width: 100%;
+}
+.admin {
+  padding: 0 3%;
+}
+.admin .title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 50px 0;
+}
+.admin .title img {
+  height: 150px;
+  margin-right: 20px;
+}
+.admin .title h1 {
+  font-size: 5.5rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.admin .add-btn-container {
+  display: flex;
+  flex-direction: row;
+}
+.admin .add-btn-container .icon-container {
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.admin .add-btn-container .icon-container .add-icon {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background: #969696;
+  color: #323232;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.admin .add-btn-container .input-field {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.admin .add-btn-container .input-field .input-title {
+  font-weight: bold;
+}
+.admin .add-btn-container .input-field .input-container {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #969696;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background: #ffffff;
+  position: relative;
+}
+.admin .add-btn-container .input-field .input-container i {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 7px;
+}
+.admin .add-btn-container .input-field .input-container input,
+.admin .add-btn-container .input-field .input-container select {
+  flex: 1;
+  border: 0;
+  min-height: 23px;
+}
+.admin .add-btn-container .input-field .input-container input[type=datetime-local],
+.admin .add-btn-container .input-field .input-container select[type=datetime-local] {
+  width: calc(100% - 20px);
+}
+.admin .add-btn-container .input-field .input-container.error {
+  border-color: #ff0000;
+}
+.admin .add-btn-container .input-field .input-container.uneditable::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  background: rgba(50, 50, 50, 0.3);
+}
+.admin .add-btn-container .input-field .lBtn {
+  padding: 5px 15px;
+  cursor: pointer;
+  color: #000;
+  background: #f7d38b;
+  font-size: 1.2rem;
+  font-weight: 100;
+  border-radius: 5px;
+  height: 35px;
+  margin-top: auto;
+}
+.admin .add-btn-container .input-field .lBtn .btn-icon {
+  font-size: 1.1rem;
+  padding-left: 7px;
+  transition: 0.3s all ease-in-out;
+}
+.admin .add-btn-container .input-field .lBtn:hover {
+  text-decoration: none;
+}
+.admin .add-btn-container .input-field .lBtn:hover .btn-icon {
+  padding-left: 14px;
+}
+.admin .add-btn-container .input-field.btn-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+.admin .add-btn-container .input-field.sz-1 {
+  width: calc(10% - 10px);
+}
+.admin .add-btn-container .input-field.sz-2 {
+  width: calc(20% - 10px);
+}
+.admin .add-btn-container .input-field.sz-3 {
+  width: calc(30% - 10px);
+}
+.admin .add-btn-container .input-field.sz-4 {
+  width: calc(40% - 10px);
+}
+.admin .add-btn-container .input-field.sz-5 {
+  width: calc(50% - 10px);
+}
+.admin .add-btn-container .input-field.sz-6 {
+  width: calc(60% - 10px);
+}
+.admin .add-btn-container .input-field.sz-7 {
+  width: calc(70% - 10px);
+}
+.admin .add-btn-container .input-field.sz-8 {
+  width: calc(80% - 10px);
+}
+.admin .add-btn-container .input-field.sz-9 {
+  width: calc(90% - 10px);
+}
+.admin .add-btn-container .input-field.sz-10 {
+  width: calc(100% - 10px);
+}
+.admin .admin-list {
+  padding: 0;
+}
+.admin .admin-list tr.sel {
+  background: #f7d38b !important;
+}
+.admin .admin-list .mini-btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.admin .admin-list .mini-btn-container .view-btn {
+  display: inline-flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  background-color: #969696;
+  color: #323232;
+  cursor: pointer;
+  transition: 0.5s all ease-in-out;
+}
+.admin .admin-list .mini-btn-container .view-btn.edit:hover {
+  color: #fff;
+  background-color: rgba(50, 150, 50, 0.8);
+}
+.admin .admin-list .mini-btn-container .view-btn.remove:hover {
+  color: #fff;
+  background-color: rgba(250, 50, 100, 0.8);
 }
 body,
 html {

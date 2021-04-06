@@ -154,7 +154,7 @@ class App extends Component{
                     { routes.map((route, i) => <SiteRoutes key={i} {...route} changePageLoc={this.changePageLoc} />) }
 
                     {/* Admin Page */}
-                    <Route exact path="/login" render={props => ( <Login {...props} userHandler={this.userHandler} />)} />
+                    <Route exact path="/login" render={props => ( <Login {...props} userHandler={this.userHandler} mySessKey={mySessKey} />)} />
                     <PrivateRoute path="/admin"><Admin userHandler={this.userHandler} /></PrivateRoute>
 
                     {/* Footer */}
@@ -193,7 +193,7 @@ const uAuth = {
             var sessionInfo = localStorage.getItem(mySessKey);
             if(sessionInfo){
                 var { localUser } = parseToken(sessionInfo);
-                ret = (localUser.userId ? true : false);
+                ret = (localUser._id ? true : false);
             }
         }
         catch(ex){
