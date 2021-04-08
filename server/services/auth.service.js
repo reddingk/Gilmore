@@ -326,7 +326,7 @@ function _sendTempEmail(email, tmpPwd, callback){
         ret +=  util.format('<h1>Reset Password</h1>');
         ret +=  util.format('<p>Your email address requested to have your password reset, if you received this in error please disregard this email.</p>');
         ret +=  util.format('<p>If this is a valid request please click the link below and complete the password reset.</p>');
-        ret +=  util.format('<a href="http://localhost:3000/login?resetCode=%s" target="_blank">Reset Link</a>', tmpPwd);             
+        ret +=  util.format('<a href="%s/login?resetCode=%s" target="_blank">Reset Link</a>', process.env.DEFAULT_URL, tmpPwd);             
 
         var mailOptions = {
             from: process.env.ADMIN_EMAIL,
