@@ -329,7 +329,7 @@ function _sendTempEmail(email, tmpPwd, callback){
         ret +=  util.format('<a href="http://localhost:3000/login?resetCode=%s" target="_blank">Reset Link</a>', tmpPwd);             
 
         var mailOptions = {
-            from: process.env.MAILGUN_SMTP_LOGIN,
+            from: process.env.ADMIN_EMAIL,
             to: email,
             subject: "Gilmore Website Password Reset",
             html: ret
